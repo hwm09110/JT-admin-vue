@@ -1,0 +1,100 @@
+.w {
+  width: 1140px;
+  margin: 0 auto;
+}
+.clearfix:after{
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clearfix {
+  zoom: 1;
+}
+.fl{
+  float: left;
+}
+.fr{
+  float: right;
+}
+
+input, button{
+  outline: none;
+  border:0;
+}
+
+input:focus { outline: none; }
+input:-webkit-autofill{
+  -webkit-box-shadow: 0 0 0 400px #fff inset!important;
+}
+
+
+/* 公共样式 */
+
+/* 大背景 */
+.common-bg{
+  width: 100%;
+  height: 540px;
+  /* background: url(../images/bg1.png) no-repeat; */
+  background: url(../../img/jtds/bg1.png) no-repeat;
+}
+
+.common-box{
+  padding-top: 84px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* logo */
+.common-box-logo{
+  width: 390px;
+  height: 40px;
+  /* background: url(../images/logo.png) no-repeat; */
+  background: url(../../img/jtds/logo.png) no-repeat;
+  float: left;
+}
+/* logo文字 */
+.common-box-word{
+  float: left;
+  font-size: 26px;
+  margin-left: 16px;
+  padding-left: 20px;
+  height: 40px;
+  line-height: 40px;
+  border-left: 2px solid #fff;
+  color: #fff;
+}
+
+/* 整体中间盒子 */
+.common-box-view{
+  padding-top: 160px;
+  width: 100%;
+  height: 680px;
+  background-color: #fff;
+  margin-top: 120px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+/* 阴影盒子 */
+.common-box-shadow{
+  height: 345px;
+  position: absolute;
+  /* background: #000; */
+  top: 540px;
+  left: 0;
+  z-index: -1;
+  border-radius: 10px;
+  box-shadow:0px 0px 5px 5px #ccc;
+}
+footer {
+  width: 450px;
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}

@@ -1,0 +1,411 @@
+// 在这里重置样式，然后这个styles文件夹中的东西，貌似你可以直接通用，改改统一样式，然后在main.js引入
+// 去除侧边栏左边框
+html,body{
+  height: 100%;
+  margin: 0;
+}
+// 清浮动
+.clearfix:after{
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clearfix {
+  zoom: 1;
+}
+// 侧边导航去除边框
+.aside-none-border{
+  border-right: none;
+}
+// 登录页面多选框样式重置
+.el-checkbox__input.is-checked+.el-checkbox__label{
+  color: #1f7fb1!important;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  background-color: #1f7fb1;
+  border-color: #1f7fb1;
+}
+.el-checkbox__input.is-foucs{
+  border-color: #1f7fb1;
+}
+// 全屏退出登录按钮样式重置
+.el-button--primary{
+    background-color: #1f7fb1;
+    border-color: #1f7fb1;
+}
+// 商品管理表格表头样式
+// .goodsList-table{
+//   .el-table th{
+//     padding: 0;
+//     height: 50px;
+//     background-color: #19a78f;
+//     color: #fff;
+//     text-align: center;
+//   }
+//   .el-table--border::after, .el-table--group::after{
+//     width: 0;
+//   }
+//   .el-table::before{
+//     height: 0;
+//   }
+//   .el-table--border{
+//     border: 0;
+//   }
+// }
+// 物流管理-对话框
+.manage{
+  // 多选框border颜色
+  .el-checkbox__inner{
+    border-color: #5f6468;
+  }
+  .el-checkbox__input.is-indeterminate .el-checkbox__inner::before{
+    content: '';
+    position: relative;
+    background-color: #fff;
+  }
+  .manage-box-form{
+    .time{
+      .el-input__icon{
+        font-size: 18px;
+        width: 380px;
+        font-weight: 600;
+        color: #1f7fb1;
+      }
+      .el-input__inner{
+        padding-left: 20px;
+      }
+    }
+  }
+  // 修改、添加对话框
+  .edit-dialog,
+  .add-dialog{
+    .el-dialog{
+      width: 460px;
+      margin: 0!important;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      .el-dialog__header{
+        padding-top: 50px;
+        padding-left: 50px;
+        font-weight: 600;
+        .el-dialog__title{
+          color: #5f6468;
+        }
+      }
+      .el-dialog__body{
+        padding-left: 50px;
+        padding-bottom: 10px;
+      }
+      .level,
+      .attr{
+        .el-input__inner{
+          width: 300px;
+        }
+      }
+      .mark,
+      .number{
+        .el-form-item__label{
+          padding-right: 5px;
+        }
+      }
+    }
+  }
+
+  // 删除对话框
+  .del{
+    .el-dialog {
+      width: 460px;
+      height: 220px;
+      margin: 0!important;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .el-dialog__header{
+      padding: 0;
+    }
+    .el-dialog__body{
+      text-align: center;
+      // height: 50px;
+      // line-height: 50px;
+      font-size: 20px;
+      color: #5f6468;
+    }
+  }
+
+  // 搜索表单
+  .manage-box-form{
+    .el-form-item{
+      margin-bottom: 0;
+    }
+    .query{
+      .el-button--primary{
+        width: 120px;
+        height: 35px;
+        line-height: 35px;
+        padding: 0;
+      }
+    }
+    .goodName{
+      .el-input__inner{
+        width: 300px;
+        height: 35px;
+        margin-bottom: 18px;
+      }
+    }
+  }
+
+  // 日期选择器位置
+  .el-picker-panel,
+  .el-date-range-picker,
+  .el-popper,
+  .has-sidebar {
+    left: 305px!important;
+  }
+}
+// 商品管理-首页商品对话框位置
+.goodsList{
+  .add,
+  .edit{
+    .el-dialog__body{
+      padding-left: 60px;
+    }
+    .el-dialog {
+      width: 524px;
+      // height: 530px;
+      margin: 0!important;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .el-dialog__header{
+      margin-bottom: 20px;
+    }
+    .el-button--primary{
+      width: 120px;
+      height: 36px;
+    }
+    // 名称label标签位置调整
+    .item-name{
+      .el-form-item__label{
+        margin-top: 25px;
+      }
+    }
+  }
+  .del{
+    .el-dialog {
+      width: 460px;
+      height: 220px;
+      margin: 0!important;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .el-dialog__header{
+      padding: 0;
+    }
+    .el-dialog__body{
+      text-align: center;
+      // height: 50px;
+      // line-height: 50px;
+      font-size: 20px;
+      color: #5f6468;
+    }
+  }
+}
+// 商品管理-商品详情对话框位置
+.goodsDetail{
+  // 删除商品、商品详情对话框
+  .del-goodDesc,
+  .del-good{
+    .el-dialog {
+      width: 460px;
+      height: 220px;
+      margin: 0!important;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .el-dialog__header{
+      padding: 0;
+    }
+    .el-dialog__body{
+      text-align: center;
+      // height: 50px;
+      // line-height: 50px;
+      font-size: 20px;
+      color: #5f6468;
+    }
+  }
+  // 添加，编辑对话框
+  .add,
+  .edit{
+    .el-dialog{
+      width: 640px;
+      margin: 0!important;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      .el-dialog__header{
+        padding-top: 50px;
+        padding-left: 50px;
+        font-weight: 600;
+        .el-dialog__title{
+          color: #5f6468;
+        }
+      }
+      .el-dialog__body{
+        padding-left: 50px;
+      }
+      .el-form-item__label{
+        width: 80px;
+        line-height: 18px;
+        text-align: left;
+        font-size: 14px;
+        padding-top: 8px;
+      }
+      .el-button--primary{
+        // margin-left: 70px;
+        width: 120px;
+        height: 35px;
+      }
+    }
+    .item-name,
+    .item-introduce{
+      .el-form-item__label{
+        margin-top: 25px;
+      }
+    }
+  }
+}
+// 邀请码管理顶部表单样式
+.codeManage{
+  // 搜索表单
+  .code-box-form{
+    .el-form-item{
+      margin-bottom: 0;
+    }
+    .query{
+      .el-button--primary{
+        width: 120px;
+        height: 35px;
+        line-height: 35px;
+        padding: 0;
+      }
+    }
+    .name{
+      .el-input__inner{
+        width: 300px;
+        height: 35px;
+        margin-bottom: 18px;
+      }
+    }
+    .attr,
+    .level{
+      .el-input__inner{
+        width: 255px;
+        height: 35px;
+        margin-left: 40px;
+      }
+    }
+  }
+  // 表格
+  .code-box-table{
+    .el-table th{
+      background-color: #eff2f5;
+      padding-left: 30px;
+      color: #5f6468;
+    }
+    .el-table__row td {
+      padding-left: 30px;
+      color: #5f6468;
+    }
+  }
+  // 创建、编辑、发送邀请码对话框
+  .create-dialog,
+  .edit-dialog,
+  .send-dialog{
+    .el-dialog{
+      width: 460px;
+      margin: 0!important;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      .el-dialog__header{
+        padding-top: 50px;
+        padding-left: 50px;
+        font-weight: 600;
+        .el-dialog__title{
+          color: #5f6468;
+        }
+      }
+      .el-dialog__body{
+        padding-left: 50px;
+        padding-bottom: 10px;
+      }
+      .level,
+      .attr{
+        .el-input__inner{
+          width: 300px;
+        }
+      }
+      .mark,
+      .number{
+        .el-form-item__label{
+          padding-right: 5px;
+        }
+      }
+    }
+  }
+  // 删除邀请码对话框
+  .del-dialog{
+    .el-dialog {
+      width: 460px;
+      height: 220px;
+      margin: 0!important;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .el-dialog__header{
+      padding: 0;
+    }
+    .el-dialog__body{
+      text-align: center;
+      // height: 50px;
+      // line-height: 50px;
+      font-size: 20px;
+      color: #5f6468;
+    }
+  }
+}
+
+// 库存信息
+.invenManage{
+  .invenManage-box-from{
+    .keyWord{
+      .el-input__inner{
+        width: 300px;
+      }
+    }
+    .query{
+      .el-button{
+        width: 120px;
+        height: 35px;
+        margin-right: 460px;
+      }
+    }
+  }
+}
