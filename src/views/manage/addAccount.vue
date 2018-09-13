@@ -59,22 +59,25 @@
     <div class="manage-box-title">添加账号</div>
     <div class="form-wrap">
       <el-form ref="form" :model="form" label-width="80px" :rules="rules" >
-        <el-form-item label="账号名称">
+        <el-form-item label="账号" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码" prop="pwd">
           <el-input v-model="form.pwd" type="password"></el-input>
         </el-form-item>
-        <el-form-item label="手机号码">
+        <el-form-item label="姓名">
+          <el-input v-model="form.userName"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号码" prop="phone">
           <el-input v-model="form.phone"></el-input>
         </el-form-item>
-        <el-form-item label="角色">
+        <el-form-item label="角色" prop="role">
           <el-radio-group v-model="form.role">
             <el-radio label="超级管理员" value="1"></el-radio>
             <el-radio label="普通管理员" value="2"></el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="权限">
+        <el-form-item label="权限" prop="type">
           <el-checkbox-group v-model="form.type">
             <el-checkbox v-for="(item,index) in modules" :key="index" :label="item.name" name="type" ></el-checkbox>
           </el-checkbox-group>
@@ -120,13 +123,14 @@ export default {
         name: '',
         pwd: '',
         phone: '',
+        userName: '',
         role: '',
         type: []
       },
       rules: {
           name: [
-            { required: true, message: '请输入账号名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            { required: true, message: '请输入账号', trigger: 'blur' },
+            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
           pwd: [
             { required: true, message: '请输入账号密码', trigger: 'blur' }
@@ -138,7 +142,7 @@ export default {
             { required: true, message: '请选择角色', trigger: 'change' }
           ],
           type: [
-            { type: 'array', required: true, message: '请至少选择一钟权限', trigger: 'change' }
+            { type: 'array', required: true, message: '请至少选择一种权限', trigger: 'change' }
           ]
       }
     }
@@ -152,7 +156,7 @@ export default {
     onSubmit() {
       console.log(this.form);
       if(!this.form.name.trim()){
-        this.$message.error('账号名称不能为空')
+        this.$message.error('账号不能为空')
         return false
       }
       if(!this.form.pwd.trim()){
@@ -181,6 +185,7 @@ export default {
         account: this.form.name,
         pswd: this.form.pwd,
         tel: this.form.phone,
+        user_name:this.form.userName,
         is_admin: this.getRoleId(this.form.role),
         auth: this.getAuthId(this.form.type)
       }).then(res => {
@@ -191,9 +196,7 @@ export default {
             type: 'success',
             duration: 2000
           });
-          setTimeout(()=>{
-            this.$router.push('/manage/accountList')
-          },2000)
+          this.$router.push('/manage/accountList')
         }else{
           this.$message.error(res.message)
         }

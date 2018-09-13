@@ -80,7 +80,11 @@
         </div>
         <div class="item-box">
           <span class="label">密码：</span>
-          <span class="val">--</span>
+          <span class="val">{{accountInfo.pswd}}</span>
+        </div>
+        <div class="item-box">
+          <span class="label">姓名：</span>
+          <span class="val">{{accountInfo.userName}}</span>
         </div>
         <div class="item-box">
           <span class="label">手机号：</span>
@@ -103,22 +107,25 @@
     <!-- 编辑 -->
     <div class="form-wrap" v-show="isShowForm">
       <el-form ref="form" :model="form" label-width="80px" :rules="rules" >
-        <el-form-item label="账号名称">
+        <el-form-item label="账号" prop="name">
           <el-input v-model="form.name" :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码" prop="pwd">
           <el-input v-model="form.pwd" type="password"></el-input>
         </el-form-item>
-        <el-form-item label="手机号码">
+        <el-form-item label="姓名">
+          <el-input v-model="form.userName"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号码" prop="phone">
           <el-input v-model="form.phone"></el-input>
         </el-form-item>
-        <el-form-item label="角色">
+        <el-form-item label="角色" prop="role">
           <el-radio-group v-model="form.role">
             <el-radio label="1">超级管理员</el-radio>
             <el-radio label="2">普通管理员</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="权限">
+        <el-form-item label="权限" prop="type">
           <el-checkbox-group v-model="form.type">
             <el-checkbox v-for="(item,index) in modules" :key="index" :label="item.id" name="type" >{{item.name}}</el-checkbox>
           </el-checkbox-group>
@@ -157,7 +164,9 @@ export default {
       accountInfo:{
         "id": "1",
         "account": "yanpan",
+        "pswd":"123456",
         "tel": "13691787932",
+        "userName": 'yanpan',
         "is_admin": "1",
         "auth": "1,2,3,4"
       },
@@ -173,6 +182,7 @@ export default {
       form: {
         name: '',
         pwd: '',
+        userName: '',
         phone: '',
         role: '',
         type: []
@@ -180,7 +190,7 @@ export default {
       rules: {
           name: [
             { required: true, message: '请输入账号名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
           ],
           pwd: [
             { required: true, message: '请输入账号密码', trigger: 'blur' }
@@ -192,7 +202,7 @@ export default {
             { required: true, message: '请选择角色', trigger: 'change' }
           ],
           type: [
-            { type: 'array', required: true, message: '请至少选择一钟权限', trigger: 'change' }
+            { type: 'array', required: true, message: '请至少选择一种权限', trigger: 'change' }
           ]
       }
     }
@@ -206,7 +216,8 @@ export default {
         this.isShowDeail = false;
         this.isShowForm = true;
         this.form.name = this.accountInfo.account;
-        this.form.pwd = '';
+        this.form.pwd = this.accountInfo.pswd;
+        this.form.userName = this.accountInfo.userName;
         this.form.phone = this.accountInfo.tel;
         this.form.role = this.accountInfo.is_admin;
         this.form.type = this.authStrToArr(this.accountInfo.auth);
@@ -222,7 +233,9 @@ export default {
             var info = res.extraData.info;
             this.accountInfo.id = info.id;
             this.accountInfo.account = info.account;
+            this.accountInfo.pswd = info.pswd;
             this.accountInfo.tel = info.tel;
+            this.accountInfo.userName = info.user_name;
             this.accountInfo.is_admin = info.is_admin;
             this.accountInfo.auth = info.auth;
           }else{
@@ -233,7 +246,7 @@ export default {
       onSubmit() {
         console.log(this.form);
         if(!this.form.name.trim()){
-          this.$message.error('账号名称不能为空')
+          this.$message.error('账号不能为空')
           return false
         }
         if(!this.form.pwd.trim()){
@@ -262,6 +275,7 @@ export default {
           id:account_id,
           account: this.form.name,
           pswd: this.form.pwd,
+          user_name: this.form.userName,
           tel: this.form.phone.toString(),
           is_admin: this.form.role,
           auth: this.getAuthId(this.form.type)
@@ -273,9 +287,7 @@ export default {
               type: 'success',
               duration: 2000
             });
-            setTimeout(()=>{
-              this.$router.push('/manage/accountList')
-            },2000)
+            this.$router.push('/manage/accountList')
           }else{
             this.$message.error(res.message)
           }

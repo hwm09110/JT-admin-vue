@@ -78,11 +78,6 @@ export default new Router({
       meta: {title: '密码重置'}
     },
     {
-      name: 'error',
-      path: '*',
-      component: error
-    },
-    {
       name: 'home',
       path: '/home',
       redirect: '/goods',
@@ -268,7 +263,12 @@ export default new Router({
           ]
         }
       ]
-    }
+    },
+    {
+      name: 'error',
+      path: '*',
+      component: error
+    },
     // 物流管理功能
     // {
     //   name: 'ManageWL',

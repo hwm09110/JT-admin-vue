@@ -136,22 +136,22 @@
           <form action="">
             <div class="login-box-view-handle-user">
               <img src="../images/user.png" alt="">
-              <input type="text" placeholder="请输入账号" name="user" v-model="user" @blur="checkUser">
+              <input type="text" placeholder="请输入账号" name="user" v-model="user" @blur="checkUser" @keyup.enter="logining">
               <div class="user-tip1" v-if="tipShow[0]">请填写账号</div>
             </div>
             <div class="login-box-view-handle-psd">
-              <input type="password" placeholder="请输入密码" name="password" v-model="password" @blur="checkPsd">
+              <input type="password" placeholder="请输入密码" name="password" v-model="password" @blur="checkPsd" @keyup.enter="logining">
               <div class="user-tip2" v-if="tipShow[1]">请填写密码</div>
             </div>
             <div class="login-box-view-handle-forget clearfix">
               <div class="login-box-view-handle-forget-seven">
                 <!-- <input type="checkbox" name="isSeven" id="selfLogin"> -->
-                <el-checkbox label="7天自动登录" v-model="sevenDay" @change="loginSelf"></el-checkbox>
+                <el-checkbox label="7天自动登录" v-model="sevenDay"></el-checkbox>
               </div>
               <span class="login-box-view-handle-forget-getPsd" @click="forget">忘记密码</span>
             </div>
             <div class="login-box-view-handle-sure">
-              <div class="submit" @click="logining">登录</div>
+              <div class="submit" @click="logining" >登录</div>
             </div>
           </form>
         </div>
@@ -199,10 +199,8 @@ export default {
     },
     // 进行登录
     logining () {
-      
-      // 开发使用
-      // localStorage.setItem('isLogin', true)
-      // this.$router.push({path: '/home'})
+      this.checkUser()
+      this.checkPsd()
 
       if (this.user && this.password) {
         // 设置本地存储来存储登录状态
@@ -217,16 +215,19 @@ export default {
         }).then(res => {
           console.log(res, '登录接口')
           if (res.data.code === '200') {
+            this.rememberAccount()
             localStorage.setItem('isLogin', true)
+            // this.$router.push({path: '/order'})
             this.$router.push({path: '/home'})
+          }else{
+             this.$message.error(res.data.message)
           }
         })
       }
     },
-    // 七天登录
-    loginSelf () {
+    // 记住账号密码 七天自动登录
+    rememberAccount () {
       if (this.sevenDay) {
-        // 上线改回七天有效
         this.setCookie('user', this.user, 7)
         this.setCookie('password', this.password, 7)
       }

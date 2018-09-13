@@ -1,16 +1,23 @@
 import axios from 'axios'
 import Qs from 'qs'
+import router from "../router";
+import { Message } from "element-ui";
 
 // 设置基准路径
-const URL = 'http://192.168.8.90'
+//本机
+const URL = ''
+//内网
+// const URL = 'http://192.168.8.90'
+//外网
 // const URL = 'http://oa.jointas.com'
-// const URL = 'https://oa.jointas.com'
+//const URL = 'https://oa.jointas.com'
+
 axios.defaults.baseURL = URL
 axios.defaults.withCredentials = true
 // 设置请求超时
 // axios.defaults.timeout = 10000
 
-// 请求拦截器
+//请求拦截器
 axios.interceptors.request.use(function (config) {
   config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
   // 登录过就不拦截
@@ -22,6 +29,27 @@ axios.interceptors.request.use(function (config) {
 }, function (error) {
   return Promise.reject(error)
 })
+
+// 添加响应拦截器
+axios.interceptors.response.use(function (response) {
+  // console.log('响应拦截器',response.data)
+  //未登录或登录过期，跳到登录登录页
+  if (response.data && response.data.code == '9001') {
+    Message.error({
+      message:response.data.message,
+      duration:3000
+    })
+    setTimeout(()=>{
+      router.push('/login')
+    },3000)
+    return Promise.reject(response.data)
+  }
+  return response
+}, function (error) {
+  // 对响应错误做点什么
+  return Promise.reject(error)
+});
+
 
 // 登录接口
 const checkLogin = (params) => {

@@ -56,16 +56,15 @@ module.exports = {
     host: '0.0.0.0',
     port: 8080,
     https: false,
-    hotOnly: false,
-    // proxyTable: {
-    //   '/jtds': {
-    //     target: 'http://192.168.8.90/',
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^/jtds': '/'
-    //     }
-    //   }
-    // }, // 设置代理
+    hotOnly: false,  
+    proxy:{
+      '/jtds/*': {
+        // target: 'http://192.168.8.90',
+        target: 'http://192.168.8.172:16619',
+        ws: true,
+        changeOrigin: true
+      },
+    },
     before: app => {}
   },
   // 第三方插件配置

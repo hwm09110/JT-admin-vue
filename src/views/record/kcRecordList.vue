@@ -112,7 +112,7 @@
   <breadcrumb :breadcrumbList='breadcrumbList'></breadcrumb>
 
   <div class="manage-box">
-    <div class="manage-box-title">修改记录列表</div>
+    <div class="manage-box-title">库存修改记录列表</div>
     <div class="table-wrap">
       <table class="table-box">
         <tbody>
@@ -127,7 +127,7 @@
             <td>{{item.account}}</td>
             <td>{{item.handle|changeToText}}</td>
             <td>
-              <a href="javascript:;" class="btn download" @click.prevent="downloadInfo(item)" v-if="item.handle == 1">下载</a>
+              <a href="javascript:;" class="btn download" @click.prevent="downloadInfo(item)" v-if="item.type == 1">下载</a>
               <span v-else>--</span>
             </td>
           </tr>
@@ -215,7 +215,8 @@ export default {
       downloadInfo (data) {
         console.log('下载url',data.Excel);
         if(data.Excel){
-          window.open(data.Excel)
+          let downloadUrl = this.$store.state.apiDomain + data.Excel
+          window.open(downloadUrl)
         }
       },
       // 控制页码到首页或尾页

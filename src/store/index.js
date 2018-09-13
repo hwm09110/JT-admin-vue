@@ -4,13 +4,14 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 const state = {
   nav: '物流管理',
+  
   //线上
-  // imgBaseUrl: 'https://oa.jointas.com',
-  // apiDomain: 'https://oa.jointas.com'
+  imgBaseUrl: 'https://oa.jointas.com',
+  apiDomain: 'https://oa.jointas.com'
 
   //测试
-  imgBaseUrl: 'http://192.168.8.90',
-  apiDomain: 'http://192.168.8.90',
+  // imgBaseUrl: 'http://192.168.8.90',
+  // apiDomain: 'http://192.168.8.90',
 }
 const mutations = {
   changeNav (state, navName) {

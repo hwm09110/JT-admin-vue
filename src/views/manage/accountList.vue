@@ -134,6 +134,7 @@
           <tr>
             <th>账号</th>
             <th>手机号</th>
+            <th>姓名</th>
             <th>角色</th>
             <th>权限</th>
             <th>操作</th>
@@ -141,6 +142,7 @@
           <tr v-for="(item,index) in tableData" :key="index">
             <td>{{item.account}}</td>
             <td>{{item.tel}}</td>
+            <td>{{item.user_name}}</td>
             <td>{{item.is_admin|getRoleName}}</td>
             <td>{{item.auth|getAuthName}}</td>
             <td>
@@ -190,6 +192,7 @@ export default {
           "id": "2",
           "user_guid": "ab0e6e01164802R07094403",
           "account": "xietongkun",
+          "user_name": "xietongkun",
           "tel": "15008489804",
           "is_admin": "1",
           "auth": "1,2,3,4"

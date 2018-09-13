@@ -86,6 +86,7 @@
         padding-top: 10px;
         box-sizing: border-box;
         border-bottom: 1px solid #dcdcdc;
+        z-index:10;
         .user-setting {
           height: 100%;
           width: 120px;
@@ -404,19 +405,19 @@ export default {
     },
     // 点击展开子菜单
     showChildMeun (index, item) {
-      // 子菜单样式还原--test
+      // 控制只有一项菜单展开 --start
       // for (let i = 0; i < this.accessAsideNav.length; i++) {
       //   for (let j = 0; j < this.accessAsideNav[i].children.length; j++) {
       //     this.accessAsideNav[i].children[j].isActive = false
       //   }
       // }
-      // 跳转路由
-      // this.$router.push({path: item.path})
-      // 控制只有一项菜单展开
       // for (let i = 0; i < this.showChild.length; i++) {
       //   this.showChild[i] = false
       // }
+      // 控制只有一项菜单展开 --end
+      
       this.$set(this.showChild, index, !this.showChild[index])
+      
       // 修改nav导航
       // this.$store.commit('changeNav', item.name)
     },
@@ -427,14 +428,6 @@ export default {
         cancelButtonText: '取消',
         type: 'none'
       }).then(() => {
-
-        // 测试 start
-        // localStorage.removeItem('isLogin')
-        // localStorage.removeItem('authList')//移除权限
-        // this.clearCookie()
-        // this.$router.push({path: '/login'})
-        // 测试 end
-
         api.checkLogout().then(res=>{
           console.log(res);
           if(res.data.code === '200'){
@@ -444,13 +437,12 @@ export default {
             })
             localStorage.removeItem('isLogin')
             localStorage.removeItem('authList')
-            this.clearCookie()
+            this.clearCookie() //清除user password
             this.$router.push({path: '/login'})
           }else{
             this.$message.error(res.message)
           }
         })
-        // this.$router.push({path: '/login'})
       })
     },
     // 激活顶部nav样式
@@ -506,7 +498,7 @@ export default {
         console.log('账号权限',res);
         if(res.code == 200){
           const authList = res.extraData.info;
-          const isAdmin = res.extraData.is_admin; //是否是超级管理员
+          const isAdmin = res.extraData.is_admin; //是否是超级管理员 1:是 2：不是
           if(authList.length>0){
             authList.forEach((item,i)=>{
               this.topNav.forEach((navItem,j)=>{
@@ -523,7 +515,7 @@ export default {
                 }
               })
             })
-            this.isSupperAdmin = isAdmin;
+            this.isSupperAdmin = isAdmin == 1?true:false;
             //保存权限信息到本地
             localStorage.setItem('authList',authList);
           }
