@@ -17,6 +17,7 @@ import store from './store/index'
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 
+
 // 路由守卫
 router.beforeEach((to, from, next) => {
   // 路由变化修改页面title
@@ -25,6 +26,7 @@ router.beforeEach((to, from, next) => {
   }
   // isLogin上线去掉--用于测试版
   let isLogin = localStorage.getItem('isLogin')
+
   // 如果登录了，就放行
   if (isLogin) {
     next()
@@ -41,6 +43,7 @@ router.beforeEach((to, from, next) => {
   }
   // next()
 })
+
 new Vue({
   router,
   store,

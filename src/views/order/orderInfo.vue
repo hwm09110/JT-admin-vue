@@ -448,6 +448,7 @@
         </el-form-item>
         <el-form-item class="query">
           <el-button type="primary" @click="searchOrder">搜索</el-button>
+          <el-button type="primary" @click="exportOrder">导出</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -1063,6 +1064,20 @@ export default {
     // 获取选择器
     getClass (selector) {
       return document.querySelectorAll(selector)
+    },
+    //导出订单
+    exportOrder () {
+      var apiDomain = this.$store.state.apiDomain;
+      var apiPath = `/jtds/Admin_Order/export?goods_name=${this.searchform.goods_name}
+                  &begin_time=${this.searchform.begin_time}
+                  &end_time=${this.searchform.end_time}
+                  &receive_name=${this.searchform.receive_name}
+                  &wl_status=${this.searchform.wl_status}
+                  &invite_code=${this.searchform.invite_code}
+                  &sale_name=${this.searchform.sale_name}`;
+      var url = apiDomain+apiPath;
+      console.log('导出订单',url);
+      window.open(url);
     }
   },
   computed: {

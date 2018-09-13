@@ -564,8 +564,9 @@ export default {
       let param = new FormData()
       param.append('excelfile', file)
       // {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
+      var apiDomain = this.$store.state.apiDomain;
       axios.post(
-        'https://oa.jointas.com/jtds/Admin_Storage/import',
+        apiDomain+'/jtds/Admin_Storage/import',
         param
       ).then(res => {
         console.log(res.data, '接口import')
@@ -581,17 +582,19 @@ export default {
     },
     // 导出excel
     outputExcel () {
-      // var html = '<html><head><meta charset="utf-8" /></head><body>' + document.querySelector('.myTable').outerHTML + '</body></html>'
-      // var blob = new Blob([html], { type: 'application/vnd.ms-excel' })
-      // var a = document.querySelector('.outputExcel')
-      // // 利用URL.createObjectURL()方法为a元素生成blob URL
-      // a.href = URL.createObjectURL(blob)
-      // // 设置文件名，目前只有Chrome和FireFox支持此属性
-      // a.download = '库存表.xls'
-      // api.exporttExcel().then(res => {
-      //   console.log(res, '导出excel')
-      // })
-      window.location.href = 'https://oa.jointas.com/jtds/Admin_Storage/export'
+      var apiDomain = this.$store.state.apiDomain;
+      var apiPath = `/jtds/Admin_Storage/export?storage_code=${this.form.storage_code}
+                  &storage_name=${this.form.storage_name}
+                  &guige=${this.form.guige}
+                  &sec_unit=${this.form.sec_unit}
+                  &organiz_code=${this.form.organiz_code}
+                  &organiz_name=${this.form.organiz_name}
+                  &company_name=${this.form.company_name}
+                  &search=${this.form.search}`;
+
+      var url = apiDomain+apiPath;
+      console.log('导出库存',url);
+      window.open(url);
     },
     // 控制页码到首页或尾页
     jumpToPage (page) {

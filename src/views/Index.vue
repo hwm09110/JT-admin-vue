@@ -147,6 +147,9 @@
         .item:nth-child(5) .icon{
           background: url('../images/kc_icon.png') no-repeat;
         }
+        .item:nth-child(6) .icon{
+          background: url('../images/kc_icon.png') no-repeat;
+        }
         .meun-item{
           height: 50px;
           line-height: 50px;
@@ -235,7 +238,7 @@
       <div class="top-right-div"></div>
       <div class="index-nav">
         <span>首页</span>
-        <span :class="{navActive: activeNav == index}" v-for="(item, index) in topNav" :key='index' @click="jumpToItem(item.path, index)">{{item.name}}</span>
+        <span :class="{navActive: activeNav == index}" v-for="(item, index) in accessTopNav" :key='index' @click="jumpToItem(item.path, index)">{{item.name}}</span>
         <!-- <span class="navActive">商品管理</span>
         <span class="navActive">邀请码管理</span> -->
       </div>
@@ -248,14 +251,14 @@
           <div class="user-setting">
             <div class="user-name">{{userName}}</div>
             <div class="user-handle">
-              <span :class="{'setting':true}">[设置]</span>
-            <span :class="{'loginout':true}" @click="loginout">[退出]</span>
+              <span :class="{'setting':true}" @click="gotoSet" v-if="isSupperAdmin">[设置]</span>
+              <span :class="{'loginout':true}" @click="loginout">[退出]</span>
             </div>
           </div>
         </div>
         <div class="aside-meun">
           <div>
-            <div v-for="(item, index) in asideNav" :key="index" class="item">
+            <div v-for="(item, index) in accessAsideNav" :key="index" class="item">
               <div :class="{'meun-item':true, 'item-active':showChild[index]}" @click="showChildMeun(index, item)">{{item.name}}
                 <div class="icon"></div>
                 <div class="show-icon" v-show="!showChild[index]"></div>
@@ -283,15 +286,20 @@
 </template>
 
 <script>
+import api from '../api/index'
+
 export default {
   created () {
-    for (let i = 0; i < this.asideNav.length; i++) {
+    this.getAccountAuth()
+  },
+  mounted () {
+    for (let i = 0; i < this.accessAsideNav.length; i++) {
       this.showChild[i] = false
       // 用户刷新过后，子菜单展开、样式依然被激活、顶部激活
-      for (let j = 0; j < this.asideNav[i].children.length; j++) {
-        // console.log(this.asideNav[i].children[j].path)
-        if (location.hash.slice(1, location.hash.length) === this.asideNav[i].children[j].path) {
-          this.asideNav[i].children[j].isActive = true
+      for (let j = 0; j < this.accessAsideNav[i].children.length; j++) {
+        // console.log(this.accessAsideNav[i].children[j].path)
+        if (location.hash.slice(1, location.hash.length) === this.accessAsideNav[i].children[j].path) {
+          this.accessAsideNav[i].children[j].isActive = true
           this.activeNav = i
           this.showChild[i] = true
         }
@@ -313,6 +321,7 @@ export default {
         //   ]
         // },
         {
+          code:1,
           name: '商品管理',
           path: '/goods',
           children: [
@@ -321,6 +330,7 @@ export default {
           ]
         },
         {
+          code:2,
           name: '邀请码',
           path: '/inviteCode',
           children: [
@@ -329,6 +339,7 @@ export default {
           ]
         },
         {
+          code:3,
           name: '物流订单管理',
           path: '/order',
           children: [
@@ -336,30 +347,54 @@ export default {
           ]
         },
         {
+          code:4,
           name: '库存',
           path: '/inventory',
           children: [
             {name: '库存信息', path: '/inventory/invenManage', isActive: false}
           ]
+        },
+        {
+          code:6,
+          name: '修改记录',
+          path: '/record',
+          children: [
+            {name: '库存修改记录', path: '/record/kcRecordList', isActive: false},
+            {name: '首页商品修改记录', path: '/record/goodsRecordList', isActive: false}
+          ]
+        },
+        {
+          code:7,
+          name: '用户',
+          path: '/user',
+          children: [
+            {name: '用户列表', path: '/user/userList', isActive: false}
+          ]
         }
       ],
       topNav: [
         // {name: '物流管理', path: '/WlList'},
-        {name: '商品管理', path: '/goods'},
-        {name: '邀请码管理', path: '/inviteCode'},
-        {name: '物流订单管理', path: '/order'},
-        {name: '库存', path: '/inventory'}
+        {name: '商品管理', path: '/goods',code:1},
+        {name: '邀请码管理', path: '/inviteCode',code:2},
+        {name: '物流订单管理', path: '/order',code:3},
+        {name: '库存', path: '/inventory',code:4}
       ],
-      activeNav: 0
+      activeNav: 0,
+      //有权访问 topNav
+      accessTopNav: [],
+      //有权访问 asideNav
+      accessAsideNav: [],
+      //是否是超级管理员,超级管理显示设置入口
+      isSupperAdmin:true
     }
   },
   methods: {
     // 鼠标点击选中
     seletctThis (index, child, item, navActive) {
       this.activeNav = navActive
-      for (let i = 0; i < this.asideNav.length; i++) {
-        for (let j = 0; j < this.asideNav[i].children.length; j++) {
-          this.asideNav[i].children[j].isActive = false
+      for (let i = 0; i < this.accessAsideNav.length; i++) {
+        for (let j = 0; j < this.accessAsideNav[i].children.length; j++) {
+          this.accessAsideNav[i].children[j].isActive = false
         }
       }
       child.isActive = true
@@ -370,9 +405,9 @@ export default {
     // 点击展开子菜单
     showChildMeun (index, item) {
       // 子菜单样式还原--test
-      // for (let i = 0; i < this.asideNav.length; i++) {
-      //   for (let j = 0; j < this.asideNav[i].children.length; j++) {
-      //     this.asideNav[i].children[j].isActive = false
+      // for (let i = 0; i < this.accessAsideNav.length; i++) {
+      //   for (let j = 0; j < this.accessAsideNav[i].children.length; j++) {
+      //     this.accessAsideNav[i].children[j].isActive = false
       //   }
       // }
       // 跳转路由
@@ -392,13 +427,30 @@ export default {
         cancelButtonText: '取消',
         type: 'none'
       }).then(() => {
-        localStorage.removeItem('isLogin')
-        this.clearCookie()
-        this.$message({
-          type: 'success',
-          message: '退出登录成功'
+
+        // 测试 start
+        // localStorage.removeItem('isLogin')
+        // localStorage.removeItem('authList')//移除权限
+        // this.clearCookie()
+        // this.$router.push({path: '/login'})
+        // 测试 end
+
+        api.checkLogout().then(res=>{
+          console.log(res);
+          if(res.data.code === '200'){
+            this.$message({
+              type: 'success',
+              message: '退出登录成功'
+            })
+            localStorage.removeItem('isLogin')
+            localStorage.removeItem('authList')
+            this.clearCookie()
+            this.$router.push({path: '/login'})
+          }else{
+            this.$message.error(res.message)
+          }
         })
-        this.$router.push({path: '/login'})
+        // this.$router.push({path: '/login'})
       })
     },
     // 激活顶部nav样式
@@ -423,6 +475,62 @@ export default {
     clearCookie () {
       this.setCookie('user', '', -1)
       this.setCookie('password', '', -1)
+    },
+    //设置[超级管理员出现]
+    gotoSet () {
+      this.$router.push({path: '/manage'})
+    },
+    //获取账号权限菜单
+    getAccountAuth () {
+      //本地测试 start
+      // var info = [1,2,3,4,5,6,7,8];
+      // info.forEach((item,i)=>{
+      //   this.topNav.forEach((navItem,j)=>{
+      //     if(navItem.code == item){
+      //       this.accessTopNav.push(navItem)
+      //     }
+      //   })
+      // })
+
+      // info.forEach((item,i)=>{
+      //   this.asideNav.forEach((navItem,j)=>{
+      //     if(navItem.code == item){
+      //       this.accessAsideNav.push(navItem)
+      //     }
+      //   })
+      // })
+      // return false;
+      //本地测试 end
+
+      api.getUserAccountAuth({}).then(res=>{
+        console.log('账号权限',res);
+        if(res.code == 200){
+          const authList = res.extraData.info;
+          const isAdmin = res.extraData.is_admin; //是否是超级管理员
+          if(authList.length>0){
+            authList.forEach((item,i)=>{
+              this.topNav.forEach((navItem,j)=>{
+                if(navItem.code == item){
+                  this.accessTopNav.push(navItem)
+                }
+              })
+            })
+
+            authList.forEach((item,i)=>{
+              this.asideNav.forEach((navItem,j)=>{
+                if(navItem.code == item){
+                  this.accessAsideNav.push(navItem)
+                }
+              })
+            })
+            this.isSupperAdmin = isAdmin;
+            //保存权限信息到本地
+            localStorage.setItem('authList',authList);
+          }
+        }else{
+          this.$message.error(res.message)
+        }
+      })
     }
   }
 }

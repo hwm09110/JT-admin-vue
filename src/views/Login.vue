@@ -199,9 +199,11 @@ export default {
     },
     // 进行登录
     logining () {
+      
       // 开发使用
-      this.$router.push({path: '/home'})
-      localStorage.setItem('isLogin', true)
+      // localStorage.setItem('isLogin', true)
+      // this.$router.push({path: '/home'})
+
       if (this.user && this.password) {
         // 设置本地存储来存储登录状态
         // localStorage.setItem('isLogin', true)
@@ -225,8 +227,8 @@ export default {
     loginSelf () {
       if (this.sevenDay) {
         // 上线改回七天有效
-        this.setCookie('user', this.user, 100)
-        this.setCookie('password', this.password, 100)
+        this.setCookie('user', this.user, 7)
+        this.setCookie('password', this.password, 7)
       }
     },
     // 忘记密码

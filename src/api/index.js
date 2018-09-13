@@ -28,6 +28,11 @@ const checkLogin = (params) => {
   return axios.post('/jtds/Admin_login/denglu', Qs.stringify(params)).then(res => res)
 }
 
+// 登出接口
+const checkLogout = (params) => {
+  return axios.post('/jtds/Admin_login/logut', Qs.stringify(params)).then(res => res)
+}
+
 // 忘记密码接口
 const forgetPsd = (params) => {
   return axios.post('/jtds/Admin_login/editpswd', Qs.stringify(params)).then(res => res)
@@ -129,6 +134,11 @@ const delOrder = (params) => {
   return axios.post('/jtds/Admin_Order/delOrder', Qs.stringify(params)).then(res => res.data)
 }
 
+//订单管理-导出订单
+const exportOrder = (params) => {
+  return axios.post('/jtds/Admin_Order/export', Qs.stringify(params)).then(res => res.data)
+}
+
 // 物流信息-添加物流信息
 const addExpress = (params) => {
   return axios.post('/jtds/Admin_Express/addExpress', Qs.stringify(params)).then(res => res.data)
@@ -159,6 +169,47 @@ const getGoodsStorage = (params) => {
   return axios.post('/jtds/Admin_Goods/getGoodsStorage', Qs.stringify(params)).then(res => res.data)
 }
 
+// 设置-账号列表
+const getUserAccountList = (params) => {
+  return axios.post('/jtds/Admin_Account/accountList', Qs.stringify(params)).then(res => res.data)
+}
+
+// 设置-添加账号
+const addUserAccount = (params) => {
+  return axios.post('/jtds/Admin_Account/addAccount', Qs.stringify(params)).then(res => res.data)
+}
+
+// 设置-编辑账号
+const editUserAccount = (params) => {
+  return axios.post('/jtds/Admin_Account/editAccount', Qs.stringify(params)).then(res => res.data)
+}
+
+// 设置-删除账号
+const delUserAccount = (params) => {
+  return axios.post('/jtds/Admin_Account/delAccount', Qs.stringify(params)).then(res => res.data)
+}
+
+// 设置-账号详情
+const getUserAccountDetail = (params) => {
+  return axios.post('/jtds/Admin_Account/accountDetail', Qs.stringify(params)).then(res => res.data)
+}
+
+// 拉取当前账号的权限
+const getUserAccountAuth = (params) => {
+  return axios.post('/jtds/Admin_Account/accountAuth', Qs.stringify(params)).then(res => res.data)
+}
+
+//拉取用户列表
+const getUserList = (params) => {
+  return axios.post('/jtds/Admin_User/userList', Qs.stringify(params)).then(res => res.data)
+}
+
+//拉取修改记录列表
+const getRecordList = (params) => {
+  return axios.post('/jtds/Admin_Logs/loglist', Qs.stringify(params)).then(res => res.data)
+}
+
+
 // get请求
 // const queryUserData = (obj) => {
 //   return axios.get('users', {params: obj}).then(res => res.data)
@@ -166,6 +217,7 @@ const getGoodsStorage = (params) => {
 
 export default {
   checkLogin,
+  checkLogout,
   forgetPsd,
   checkMsg,
   sendMsg,
@@ -186,10 +238,19 @@ export default {
   getOrderList,
   getOrderDetail,
   delOrder,
+  exportOrder,
   editExpress,
   addExpress,
   importExcel,
   exporttExcel,
   getStorageList,
-  getGoodsStorage
+  getGoodsStorage,
+  getUserAccountList,
+  addUserAccount,
+  editUserAccount,
+  delUserAccount,
+  getUserAccountDetail,
+  getUserAccountAuth,
+  getUserList,
+  getRecordList
 }

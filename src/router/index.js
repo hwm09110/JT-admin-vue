@@ -27,6 +27,24 @@ import goods from '@/views/goods/Goods'
 import goodsList from '@/views/goods/goodsList'
 import goodsDetail from '@/views/goods/goodsDetail'
 
+//设置
+import manage from '@/views/manage/manage'
+import accountList from '@/views/manage/accountList'
+import addAccount from '@/views/manage/addAccount'
+import accountDetail from '@/views/manage/accountDetail'
+
+//用户
+import user from '@/views/user/user'
+import userList from '@/views/user/userList'
+
+//操作记录
+import record from '@/views/record/record'
+import kcRecordList from '@/views/record/kcRecordList'
+import goodsRecordList from '@/views/record/goodsRecordList'
+
+//错误页面
+import error from '@/views/error'
+
 // 主页面、登录页面、忘记密码页面
 import index from '@/views/Index'
 import Login from '@/views/Login'
@@ -58,6 +76,11 @@ export default new Router({
       component: Forget,
       // component: () => import('@/views/forget/Forget'),
       meta: {title: '密码重置'}
+    },
+    {
+      name: 'error',
+      path: '*',
+      component: error
     },
     {
       name: 'home',
@@ -179,6 +202,68 @@ export default new Router({
               path: 'invenManage',
               component: invenManage,
               meta: {title: '库存信息'}
+            }
+          ]
+        },
+        //账号设置
+        {
+          name: 'manage',
+          path: '/manage',
+          redirect: '/manage/accountList',
+          component: manage,
+          children: [
+            {
+              name: 'accountList',
+              path: 'accountList',
+              component: accountList,
+              meta: {title: '账号列表',code:5}
+            },
+            {
+              name: 'addAccount',
+              path: 'addAccount',
+              component: addAccount,
+              meta: {title: '添加账号',code:5}
+            },
+            {
+              name: 'accountDetail',
+              path: 'accountDetail',
+              component: accountDetail,
+              meta: {title: '账号详情',code:5}
+            }
+          ]
+        },
+        //用户 
+        {
+          name: 'user',
+          path: '/user',
+          redirect: '/user/userList',
+          component: user,
+          children: [
+            {
+              name: 'userList',
+              path: 'userList',
+              component: userList,
+              meta: {title: '用户列表'}
+            }
+          ]
+        },
+        {
+          name: 'record',
+          path: '/record',
+          redirect: '/record/kcRecordList',
+          component: record,
+          children: [
+            {
+              name: 'kcRecordList',
+              path: 'kcRecordList',
+              component: kcRecordList,
+              meta: {title: '库存修改列表'}
+            },
+            {
+              name: 'goodsRecordList',
+              path: 'goodsRecordList',
+              component: goodsRecordList,
+              meta: {title: '首页商品修改列表'}
             }
           ]
         }

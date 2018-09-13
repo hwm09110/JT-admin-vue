@@ -762,8 +762,10 @@ export default {
         console.log(res, '查看库存')
         if (res.code === '200') {
           if (res.extraData.info) {
+            this.kcInfo.tip = ''
             this.kcInfo = res.extraData.info
           } else {
+            this.kcInfo.sec_num = 0
             this.kcInfo.tip = '此库存编码不在库存列表中，请更新库存表或检查编码是否正确!'
           }
         }
