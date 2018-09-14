@@ -217,8 +217,12 @@ export default {
           if (res.data.code === '200') {
             this.rememberAccount()
             localStorage.setItem('isLogin', true)
-            // this.$router.push({path: '/order'})
-            this.$router.push({path: '/home'})
+            //登录成功，拿权限列表
+            this.$store.dispatch('getAccessRouter').then(res=>{
+              
+              this.jumpToFirstAccess()
+            })
+            
           }else{
              this.$message.error(res.data.message)
           }
@@ -260,7 +264,7 @@ export default {
     clearCookie () {
       this.setCookie('username', '', -1)
     },
-    checkCookie: function () {
+    checkCookie () {
       var user = this.getCookie('username')
       if (user !== '') {
         alert('Welcome again ' + user)
@@ -305,6 +309,15 @@ export default {
       }
       this.today = Y + '年' + M + '月' + D + '日' + X
       localStorage.setItem('today', this.today)
+    },
+    //跳转到有权限访问的第一个页面
+    jumpToFirstAccess () {
+      console.log(this.$store.state.accessRouteList);
+      let constantRoutePath = this.$store.state.constantRoutePath
+      let accessRouteList = this.$store.state.accessRouteList
+      let path_code = Math.min(...accessRouteList)
+      let jump_path = constantRoutePath[path_code] || {path: '/home'}
+      this.$router.push(jump_path)
     }
   },
   destroyed () {

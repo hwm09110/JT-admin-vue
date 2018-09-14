@@ -792,6 +792,7 @@ export default {
           goodDescImg: '',
           nameDesc: '',
           introduce: '',
+          color:'',
           images: [
             // 'http://pic.58pic.com/58pic/10/97/02/30a58PICH7N.jpg',
             // 'http://pic.58pic.com/58pic/10/97/02/30a58PICH7N.jpg',
@@ -934,7 +935,7 @@ export default {
       this.editform.unit = item.unit
       this.editform.color = item.color
       this.editform.type = item.type
-      this.editform.colors = item.colors || ['黑']
+      this.editform.colors = item.color?item.color.split(','):['黑']
       // this.editform.colorsList = item.colors || []
       if (item.images) {
         for (let i = 0; i < item.images.length; i++) {
@@ -1071,15 +1072,14 @@ export default {
           colors.push(item)
         }
       })
-      console.log(addImages, 'addImages')
-      console.log(colors, 'colors')
+      // console.log(addImages, 'addImages')
+      // console.log(colors, 'colors')
       api.addGoodDesc({
         goods_id: this.addform.id,
         imageArr: addImages,
         goods_intro: this.addform.goods_intro,
         goods_use: this.addform.goods_use,
         unit: this.addform.unit,
-        // color: this.addform.color,
         type: this.addform.type,
         colors: colors
       }).then(res => {

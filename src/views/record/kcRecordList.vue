@@ -125,7 +125,7 @@
           <tr v-for="(item,index) in tableData" :key="index">
             <td>{{item.handle_date}}</td>
             <td>{{item.account}}</td>
-            <td>{{item.handle|changeToText}}</td>
+            <td>{{item.handle|changeToText(item.type)}}</td>
             <td>
               <a href="javascript:;" class="btn download" @click.prevent="downloadInfo(item)" v-if="item.type == 1">下载</a>
               <span v-else>--</span>
@@ -156,7 +156,7 @@ import tableNoData from '../../components/tableNoData'
 import api from '../../api/index'
 export default {
   created () {
-    this.getKcRecordList(this.currentPage)
+    // this.getKcRecordList(this.currentPage)
   },
   data () {
     return {
@@ -170,7 +170,7 @@ export default {
           "id": "3",
           "user_guid": "ab0e6e01164802R07094402",
           "account": "yanpan",
-          "type": "2",
+          "type": "1",
           "handle": "2",
           "handle_time": "1536743764",
           "handle_content": "yanpan编辑了商品27",
@@ -240,14 +240,18 @@ export default {
       }
   },
   filters: {
-    changeToText (val) {
+    changeToText (handle,type) {
       var text = '';
-      if(val == 1){
-        text = '增加';
-      }else if(val == 2){
-        text = '修改';
-      }else if(val == 3){
-        text = '删除';
+      if(type == 1){
+        text = '导入'
+      }else if(type == 2){
+        if(handle == 1){
+          text = '增加';
+        }else if(handle == 2){
+          text = '修改';
+        }else if(handle == 3){
+          text = '删除';
+        }
       }
       return text
     }

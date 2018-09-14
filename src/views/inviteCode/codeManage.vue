@@ -336,12 +336,13 @@
           </el-table-column>
           <el-table-column
             label="操作"
-            width="200"
+            width="300"
             >
             <template slot-scope="scope">
               <span class="handle" @click="showDelCode(scope.row)">删除</span>
               <!-- <span class="handle" @click="showEditCode(scope.row)">修改</span> -->
-              <span class="handle" @click="showSendDialog(scope.row)">发送</span>
+              <span class="handle" @click="showSendDialog(scope.row)">发送邀请码</span>
+              <span class="handle" @click="showSendCouponDialog(scope.row)">发送优惠券</span>
             </template>
           </el-table-column>
         </el-table>
@@ -497,6 +498,20 @@
           </div>
         </el-dialog>
       </div>
+
+      <!-- 发送优惠券确认对话框 -->
+      <div class="del-dialog">
+        <el-dialog
+        :visible.sync="sendCouponDialog"
+        class="del-dialog">
+          <div class="del-title">确定发送优惠券？</div>
+          <div class="del-handle">
+            <div class="sureBtn" @click="sendCoupon">确定</div>
+            <div class="delBtn" @click="cancelHand('sendCoupon')">取消</div>
+          </div>
+        </el-dialog>
+      </div>
+
     </div>
   </div>
 </template>
@@ -544,14 +559,14 @@ export default {
       // 底部表单数据
       codeList: [
         {
-          level: 'A',
-          discount: '9',
-          property: 'A',
-          company: '集泰及分公司',
-          mark: 'JT',
-          name: '谢谢谢',
-          number: '0001',
-          code: 'AAJT0001'
+          'id':  45,
+          'level': 'A',
+          'property':  'A',
+          'company': '测试',
+          'mark':  'JT',
+          'name':  '测试01 - A-A',
+          'number':  '4960',
+          'code':  'AAJT4960'
         }
       ],
       // 是否显示创建邀请码
@@ -592,6 +607,13 @@ export default {
         phone: '',
         code: ''
       },
+      //发送优惠券所需参数
+      sendCouponForm: {
+        level:'',
+        code_id:''
+      },
+      // 显示发送优惠券对话框
+      sendCouponDialog:false,
       // 总页数
       totalPage: 1,
       // 当前页数
@@ -649,6 +671,13 @@ export default {
     showDelCode (item) {
       this.delDialog = true
       this.delId = item.id
+    },
+    //显示发送优惠券弹窗
+    showSendCouponDialog (item) {
+      console.log(item);
+      this.sendCouponDialog = true
+      this.sendCouponForm.level = item.level
+      this.sendCouponForm.code_id = item.id
     },
     // 控制页码到首页或尾页
     jumpToPage (page) {
@@ -783,7 +812,27 @@ export default {
         this.delDialog = false
       } else if (item === 'send') {
         this.sendDialog = false
+      } else if (item === 'sendCoupon') {
+        this.sendCouponDialog = false
       }
+    },
+    //确定发送优惠券
+    sendCoupon () {
+      api.sendCoupon({
+        level:this.sendCouponForm.level,
+        code_id:this.sendCouponForm.code_id
+      }).then(res=>{
+        console.log(res)
+        this.sendCouponDialog = false
+        if(res.code == 200){
+          this.$message({
+            message: res.message,
+            type: 'success',
+          });
+        }else{
+          this.$message.error(res.message)
+        }
+      })
     },
     // 输入姓名或邀请码查询
     searchCode () {
@@ -799,6 +848,7 @@ export default {
     },
     // 获取、查询邀请码接口
     getCode (level, property, search, page = 1) {
+      // this.loading = true //开启loading 动画
       api.getYqm({
         level: level,
         property: property,
@@ -806,8 +856,8 @@ export default {
         page: page
       }).then(res => {
         console.log(res, '获取邀请码')
+        this.loading = false
         if (res.code === '200') {
-          this.loading = false
           this.codeList = res.extraData.info
           if (Math.ceil(res.extraData.count / res.extraData.len) !== 0) {
             this.totalPage = Math.ceil(res.extraData.count / res.extraData.len)

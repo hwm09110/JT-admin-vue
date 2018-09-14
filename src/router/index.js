@@ -121,21 +121,21 @@ export default new Router({
           redirect: '/goods/goodsList',
           component: goods,
           // component: () => import('@/views/goods/Goods'),
-          meta: {title: '商品管理'},
+          meta: {title: '商品管理',code:1},
           children: [
             {
               name: 'goodsDetail',
               path: 'goodsDetail',
               component: goodsDetail,
               // component: () => import('@/views/goods/goodsDetail'),
-              meta: {title: '商品详情'}
+              meta: {title: '商品详情',code:1}
             },
             {
               name: 'goodsList',
               path: 'goodsList',
               component: goodsList,
               // component: () => import('@/views/goods/goodsList'),
-              meta: {title: '商品列表'}
+              meta: {title: '商品列表',code:1}
             }
           ]
         },
@@ -146,21 +146,21 @@ export default new Router({
           redirect: '/inviteCode/codeManage',
           component: inviteCode,
           // component: () => import('@/views/inviteCode/InviteCode'),
-          meta: {title: '邀请码'},
+          meta: {title: '邀请码',code:2},
           children: [
             {
               name: 'codeManage',
               path: 'codeManage',
               component: codeManage,
               // component: () => import('@/views/inviteCode/codeManage'),
-              meta: {title: '邀请码管理'}
+              meta: {title: '邀请码管理',code:2}
             },
             {
               name: 'sendCode',
               path: 'sendCode',
               component: sendCode,
               // component: () => import('@/views/inviteCode/sendCode'),
-              meta: {title: '发送邀请码'}
+              meta: {title: '发送邀请码',code:2}
             }
           ]
         },
@@ -175,13 +175,13 @@ export default new Router({
               name: 'orderInfo',
               path: 'orderInfo',
               component: orderInfo,
-              meta: {title: '订单信息'}
+              meta: {title: '订单信息',code:3}
             },
             {
               name: 'seeOrder',
               path: 'seeOrder',
               component: seeOrder,
-              meta: {title: '查看订单'}
+              meta: {title: '查看订单',code:3}
             }
           ]
         },
@@ -196,7 +196,7 @@ export default new Router({
               name: 'invenManage',
               path: 'invenManage',
               component: invenManage,
-              meta: {title: '库存信息'}
+              meta: {title: '库存信息',code:4}
             }
           ]
         },
@@ -227,6 +227,27 @@ export default new Router({
             }
           ]
         },
+        //修改记录
+        {
+          name: 'record',
+          path: '/record',
+          redirect: '/record/kcRecordList',
+          component: record,
+          children: [
+            {
+              name: 'kcRecordList',
+              path: 'kcRecordList',
+              component: kcRecordList,
+              meta: {title: '库存修改列表',code:6}
+            },
+            {
+              name: 'goodsRecordList',
+              path: 'goodsRecordList',
+              component: goodsRecordList,
+              meta: {title: '首页商品修改列表',code:6}
+            }
+          ]
+        },
         //用户 
         {
           name: 'user',
@@ -238,27 +259,7 @@ export default new Router({
               name: 'userList',
               path: 'userList',
               component: userList,
-              meta: {title: '用户列表'}
-            }
-          ]
-        },
-        {
-          name: 'record',
-          path: '/record',
-          redirect: '/record/kcRecordList',
-          component: record,
-          children: [
-            {
-              name: 'kcRecordList',
-              path: 'kcRecordList',
-              component: kcRecordList,
-              meta: {title: '库存修改列表'}
-            },
-            {
-              name: 'goodsRecordList',
-              path: 'goodsRecordList',
-              component: goodsRecordList,
-              meta: {title: '首页商品修改列表'}
+              meta: {title: '用户列表',code:7}
             }
           ]
         }

@@ -291,6 +291,7 @@ import api from '../api/index'
 
 export default {
   created () {
+    //拉取权限列表
     this.getAccountAuth()
   },
   mounted () {
@@ -386,7 +387,7 @@ export default {
       //有权访问 asideNav
       accessAsideNav: [],
       //是否是超级管理员,超级管理显示设置入口
-      isSupperAdmin:true
+      isSupperAdmin:false
     }
   },
   methods: {
@@ -417,7 +418,7 @@ export default {
       // 控制只有一项菜单展开 --end
       
       this.$set(this.showChild, index, !this.showChild[index])
-      
+
       // 修改nav导航
       // this.$store.commit('changeNav', item.name)
     },
@@ -436,7 +437,7 @@ export default {
               message: '退出登录成功'
             })
             localStorage.removeItem('isLogin')
-            localStorage.removeItem('authList')
+            localStorage.removeItem('accessRouteList')
             this.clearCookie() //清除user password
             this.$router.push({path: '/login'})
           }else{
@@ -473,55 +474,60 @@ export default {
       this.$router.push({path: '/manage'})
     },
     //获取账号权限菜单
+    // getAccountAuth () {
+    //   api.getUserAccountAuth({}).then(res=>{
+    //     console.log('账号权限列表',res);
+    //     if(res.code == 200){
+    //       const authList = res.extraData.info;
+    //       const isAdmin = res.extraData.is_admin; //是否是超级管理员 1:是 2：不是
+    //       if(authList.length>0){
+    //         authList.forEach((item,i)=>{
+    //           this.topNav.forEach((navItem,j)=>{
+    //             if(navItem.code == item){
+    //               this.accessTopNav.push(navItem)
+    //             }
+    //           })
+    //         })
+
+    //         authList.forEach((item,i)=>{
+    //           this.asideNav.forEach((navItem,j)=>{
+    //             if(navItem.code == item){
+    //               this.accessAsideNav.push(navItem)
+    //             }
+    //           })
+    //         })
+
+    //         this.isSupperAdmin = isAdmin == 1?true:false;
+    //         //保存权限信息到本地
+    //         localStorage.setItem('authList',authList);
+    //       }
+    //     }else{
+    //       this.$message.error(res.message)
+    //     }
+    //   })
+    // }
     getAccountAuth () {
-      //本地测试 start
-      // var info = [1,2,3,4,5,6,7,8];
-      // info.forEach((item,i)=>{
-      //   this.topNav.forEach((navItem,j)=>{
-      //     if(navItem.code == item){
-      //       this.accessTopNav.push(navItem)
-      //     }
-      //   })
-      // })
+      this.$store.dispatch('getAccessRouter').then(res=>{
+        let accessRouteList = this.$store.state.accessRouteList
 
-      // info.forEach((item,i)=>{
-      //   this.asideNav.forEach((navItem,j)=>{
-      //     if(navItem.code == item){
-      //       this.accessAsideNav.push(navItem)
-      //     }
-      //   })
-      // })
-      // return false;
-      //本地测试 end
-
-      api.getUserAccountAuth({}).then(res=>{
-        console.log('账号权限',res);
-        if(res.code == 200){
-          const authList = res.extraData.info;
-          const isAdmin = res.extraData.is_admin; //是否是超级管理员 1:是 2：不是
-          if(authList.length>0){
-            authList.forEach((item,i)=>{
-              this.topNav.forEach((navItem,j)=>{
-                if(navItem.code == item){
-                  this.accessTopNav.push(navItem)
-                }
-              })
+        if(accessRouteList.length>0){
+          accessRouteList.forEach((item,i)=>{
+            this.topNav.forEach((navItem,j)=>{
+              if(navItem.code == item){
+                this.accessTopNav.push(navItem)
+              }
             })
+          })
 
-            authList.forEach((item,i)=>{
-              this.asideNav.forEach((navItem,j)=>{
-                if(navItem.code == item){
-                  this.accessAsideNav.push(navItem)
-                }
-              })
+          accessRouteList.forEach((item,i)=>{
+            this.asideNav.forEach((navItem,j)=>{
+              if(navItem.code == item){
+                this.accessAsideNav.push(navItem)
+              }
             })
-            this.isSupperAdmin = isAdmin == 1?true:false;
-            //保存权限信息到本地
-            localStorage.setItem('authList',authList);
-          }
-        }else{
-          this.$message.error(res.message)
+          })
         }
+        this.isSupperAdmin = this.$store.state.is_supper_admin
       })
     }
   }

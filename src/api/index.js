@@ -10,7 +10,7 @@ const URL = ''
 // const URL = 'http://192.168.8.90'
 //外网
 // const URL = 'http://oa.jointas.com'
-//const URL = 'https://oa.jointas.com'
+// const URL = 'https://oa.jointas.com'
 
 axios.defaults.baseURL = URL
 axios.defaults.withCredentials = true
@@ -39,9 +39,9 @@ axios.interceptors.response.use(function (response) {
       message:response.data.message,
       duration:3000
     })
-    setTimeout(()=>{
-      router.push('/login')
-    },3000)
+    router.push('/login')
+    localStorage.removeItem('isLogin')
+    localStorage.removeItem('accessRouteList')
     return Promise.reject(response.data)
   }
   return response
@@ -104,6 +104,11 @@ const delYqm = (params) => {
 // 发送邀请码
 const sendYqm = (params) => {
   return axios.post('/jtds/Admin_Invitecode/sendCode', Qs.stringify(params)).then(res => res.data)
+}
+
+// 发送优惠券
+const sendCoupon = (params) => {
+  return axios.post('/jtds/Admin_InviteCode/sendCoupon', Qs.stringify(params)).then(res => res.data)
 }
 
 // 商品接口
@@ -255,6 +260,7 @@ export default {
   editYqm,
   delYqm,
   sendYqm,
+  sendCoupon,
   addGood,
   editGood,
   getGoodList,
