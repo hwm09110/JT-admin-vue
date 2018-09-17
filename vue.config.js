@@ -60,7 +60,8 @@ module.exports = {
     proxy:{
       '/jtds/*': {
         // target: 'http://192.168.8.90',
-        target: 'http://192.168.8.172:16619',
+        // target: 'http://192.168.8.172:16619',
+        target: 'http://127.0.0.1:3601'
         ws: true,
         changeOrigin: true
       },
