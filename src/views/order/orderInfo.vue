@@ -115,8 +115,10 @@
       border-bottom: 1px solid #dcdcdc;
     }
     .manage-box-content{
+      overflow-x:auto;
       padding: 20px;
       .manage-item{
+        width:1558px;
         .manage-item-baseInfo{
           padding-left: 20px;
           height: 50px;
@@ -143,6 +145,10 @@
           .item-checkbox:checked{
             background: url('../../images/check.png') no-repeat -1px -1px;
             border:0;
+          }
+          .order-code{
+            float: left;
+            margin-right: 50px;
           }
           .time{
             margin-right: 50px;
@@ -291,6 +297,17 @@
             }
             &-do{
               color: #1f7fb1;
+            }
+          }
+          .buyer-message{
+            margin-top: 15px;
+            position: relative;
+            text-align: center;
+            width: 90px;
+            height: inherit;
+            float: left;
+            .content{
+              line-height:20px;
             }
           }
           .middle-text{
@@ -467,6 +484,7 @@
       <div class="manage-item" v-for="(item, index) in orderList" :key='index' v-if="orderList.length != 0">
         <div class="manage-item-baseInfo">
           <!-- <input type="checkbox" class="item-checkbox" :checked="item.isCheck" @change="checkThis(index, item.id)"> -->
+          <div class="order-code">订单号：{{item.order_code}}</div>
           <div class="time">
             <span class="year">订单日期：{{item.create_time | filterYear}}</span>
             <!-- 已支付显示支付时间 -->
@@ -487,7 +505,7 @@
                 <div class="size-unit">{{gitem.goods_name}}</div>
                 <div class="size-color">
                   <span style="margin-right:20px;">单位：{{gitem.unit}} </span>
-                  <span>颜色：{{gitem.color}}</span>
+                  <span>颜色：{{gitem.check_color}}</span>
                 </div>
                 <div class="size-size">型号：{{gitem.type}}</div>
               </div>
@@ -581,13 +599,19 @@
           </div>
           <!-- 未支付订单显示未支付 -->
           <div class="statePay" v-if="item.pay_status == 2">
-            <span>订单尚未支付</span>
+            <span v-if="item.order_status == 1">订单尚未支付</span>
+            <span v-if="item.order_status == 2">订单已删除</span>
+            <span v-if="item.order_status == 3">订单已撤销</span>
           </div>
           <!-- 操作 -->
           <div class="handlePay">
             <div class="handlePay-see" @click="seeOrderInfo(item.order_id)">查看订单</div>
             <div class="handlePay-do" v-if="item.wl_status == 1 && item.pay_status == 1" @click="showDialog('add', item)">添加物流信息</div>
             <div class="handlePay-do" v-if="item.wl_status == 2 && item.pay_status == 1" @click="showDialog('edit', item)">修改物流信息</div>
+          </div>
+          <!-- 买家留言 -->
+          <div class="buyer-message">
+            买家留言：<span class="content">{{item.mark?item.mark:'--'}}</span>
           </div>
         </div>
       </div>
@@ -677,6 +701,7 @@ export default {
       orderList: [
         {
           order_id: '1',
+          order_code: '0145145185451',
           // 支付状态 （2未支付，1已支付）
           pay_status: '1',
           // 物流状态（1未发货，2发货中，3已完成）
@@ -699,8 +724,10 @@ export default {
           invoice_type: '3',
           email: '123456@789.com',
           isCheck: false,
+          mark: '麻烦请尽快发货！！！',
           list: [
             {
+              check_color:'',
               color: '白',
               goods_name: '商品1111',
               goods_num: '5',
@@ -709,6 +736,7 @@ export default {
               unit: '箱'
             },
             {
+              check_color: '',
               color: '黑',
               goods_name: '商品5511',
               goods_num: 2,
@@ -718,130 +746,6 @@ export default {
             }
           ]
           // --------------------
-        },
-        {
-          order_id: '2',
-          pay_status: '1',
-          wl_status: '2',
-          total_price: '990',
-          create_time: new Date(),
-          pay_time: new Date(),
-          rec_name: '小明',
-          sale_name: '销售员12',
-          code: 'AAJT0006',
-          phone: '13265656565',
-          express_name: '韵达',
-          express_code: '01234567',
-          addr: '广州市黄埔区南翔南翔南翔一路62号',
-          invoice_num: '09095858585858',
-          invoice_title: '集泰化工公司',
-          // 抬头类型（1公司，2个人）
-          invoice_title_type: '1',
-          // 发票类型（1普通，2电子）
-          invoice_type: '3',
-          email: '123456@789.com',
-          isCheck: false,
-          list: [
-            {
-              color: '白',
-              goods_name: '商品1111',
-              goods_num: '5',
-              goods_price: '500',
-              type: '300ml*24支/箱',
-              unit: '箱'
-            },
-            {
-              color: '黑',
-              goods_name: '商品5511',
-              goods_num: 2,
-              goods_price: 600,
-              type: '300ml*24支/箱',
-              unit: '箱'
-            }
-          ]
-          // --------------------
-        },
-        {
-          order_id: '3',
-          pay_status: '2',
-          wl_status: '3',
-          total_price: '990',
-          create_time: new Date(),
-          pay_time: new Date(),
-          rec_name: '小明',
-          sale_name: '销售员12',
-          code: 'AAJT0006',
-          phone: '13265656565',
-          express_name: '韵达',
-          express_code: '01234567',
-          addr: '广州市黄埔区南翔南翔南翔一路62号',
-          invoice_num: '09095858585858',
-          invoice_title: '集泰化工公司',
-          // 抬头类型（1公司，2个人）
-          invoice_title_type: '1',
-          // 发票类型（1普通，2电子）
-          invoice_type: '3',
-          email: '123456@789.com',
-          isCheck: false,
-          list: [
-            {
-              color: '白',
-              goods_name: '商品1111',
-              goods_num: '5',
-              goods_price: '500',
-              type: '300ml*24支/箱',
-              unit: '箱'
-            },
-            {
-              color: '黑',
-              goods_name: '商品5511',
-              goods_num: 2,
-              goods_price: 600,
-              type: '300ml*24支/箱',
-              unit: '箱'
-            }
-          ]
-          // --------------------
-        },
-        {
-          order_id: '13',
-          pay_status: '1',
-          wl_status: '3',
-          total_price: '990',
-          create_time: new Date(),
-          pay_time: new Date(),
-          name: '小明',
-          phone: '13265656565',
-          express_name: '韵达',
-          express_code: '01234567',
-          addr: '广州市黄埔区南翔南翔南翔一路62号',
-          invoice_num: '09095858585858',
-          invoice_title: '集泰化工公司',
-          // 抬头类型（1公司，2个人）
-          invoice_title_type: '1',
-          // 发票类型（1普通，2电子）
-          invoice_type: '2',
-          email: '123456@789.com',
-          isCheck: false,
-          list: [
-            {
-              color: '白',
-              goods_name: '商品1111',
-              goods_num: '5',
-              goods_price: '500',
-              type: '300ml*24支/箱',
-              unit: '箱'
-            },
-            {
-              color: '黑',
-              goods_name: '商品5511',
-              goods_num: 2,
-              goods_price: 600,
-              type: '300ml*24支/箱',
-              unit: '箱'
-            }
-          ]
-          // -------
         }
       ],
       selectArr: [],

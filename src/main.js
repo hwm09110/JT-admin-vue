@@ -22,7 +22,7 @@ Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
   // console.log('to 路由信息',to)
   let path_code = to.meta.code
-  // console.log(path_code)
+  console.log('path_code',path_code)
   let accessRouteList = localStorage.getItem('accessRouteList')?JSON.parse(localStorage.getItem('accessRouteList')):[]
   // console.log(accessRouteList)
 
@@ -30,9 +30,9 @@ router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title
   }
-  // isLogin上线去掉--用于测试版
   let isLogin = localStorage.getItem('isLogin')
-
+  
+  // return;
   // 如果登录了，就放行
   if (isLogin) {
     if(path_code){
@@ -42,9 +42,7 @@ router.beforeEach((to, from, next) => {
         next({path: '/error'})
       }
     }else{
-      if(to.path === '/error'){
-        next()
-      }
+      next()
     }
   } else {
     // 路由拦截，判读是否登录

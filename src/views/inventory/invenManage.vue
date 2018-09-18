@@ -564,21 +564,34 @@ export default {
       let param = new FormData()
       param.append('excelfile', file)
       // {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
-      var apiDomain = this.$store.state.apiDomain;
-      axios.post(
-        apiDomain+'/jtds/Admin_Storage/import',
-        param
-      ).then(res => {
-        console.log(res.data, '接口import')
-        if (res.data.code === '200') {
+      //var apiDomain = this.$store.state.apiDomain;
+      // axios.post(
+      //   apiDomain+'/jtds/Admin_Storage/import',
+      //   param
+      // ).then(res => {
+      //   console.log(res.data, '接口import')
+      //   if (res.data.code === '200') {
+      //     this.$message({
+      //       message: res.data.message,
+      //       type: 'success'
+      //     });
+      //     this.storageList()
+      //   }else{
+      //     this.$message.error(res.data.message)
+      //   }
+      // })
+
+      api.importExcel(param).then(res => {
+        console.log(res, '接口import')
+        if (res.code === '200') {
+          this.$alert(res.message, '信息', {
+            confirmButtonText: '确定',
+          });
           this.storageList()
+        }else{
+          this.$message.error(res.message)
         }
       })
-      // api.importExcel({
-      //   excelfile: param
-      // }).then(res => {
-      //   console.log(res, '上传excel')
-      // })
     },
     // 导出excel
     outputExcel () {

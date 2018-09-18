@@ -156,7 +156,7 @@ import tableNoData from '../../components/tableNoData'
 import api from '../../api/index'
 export default {
   created () {
-    // this.getKcRecordList(this.currentPage)
+    this.getKcRecordList(this.currentPage)
   },
   data () {
     return {

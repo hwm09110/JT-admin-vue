@@ -1,15 +1,17 @@
 import axios from 'axios'
 import Qs from 'qs'
-import router from "../router";
-import { Message } from "element-ui";
+import router from "../router"
+import { Message } from "element-ui"
+import baseURL from '../../config/setBaseUrl'
 
 // 设置基准路径
 //本机
-const URL = ''
+const URL = baseURL.axios_base_url
+
 //内网
 // const URL = 'http://192.168.8.90'
+
 //外网
-// const URL = 'http://oa.jointas.com'
 // const URL = 'https://oa.jointas.com'
 
 axios.defaults.baseURL = URL
@@ -184,7 +186,7 @@ const editExpress = (params) => {
 
 // 库存-导入excel
 const importExcel = (params) => {
-  return axios.post('/jtds/Admin_Storage/import', Qs.stringify(params)).then(res => res.data)
+  return axios.post('/jtds/Admin_Storage/import', params).then(res => res.data)
 }
 
 // 库存-导出excel

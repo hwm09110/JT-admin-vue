@@ -175,7 +175,9 @@ export default {
     if (localStorage.getItem('isLogin')) {
       this.user = this.getCookie('user')
       this.password = this.getCookie('password')
-      this.logining()
+      if(this.user && this.password){
+        this.logining()
+      }
     }
   },
   mounted () {
