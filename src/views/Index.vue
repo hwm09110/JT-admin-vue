@@ -310,7 +310,7 @@ export default {
   },
   data () {
     return {
-      userName: '集泰最帅',
+      userName: localStorage.getItem('user') ||'集泰最帅',
       // 是否激活子菜单
       showChild: [],
       // 菜单列表数据

@@ -871,9 +871,9 @@ export default {
   filters: {
     // 等级过滤
     filtersLevel (level) {
-      if (level === 'A' || level === 'B') {
+      if (level === 'A' || level === 'B' || level === 'C') {
         return 9
-      } else if (level === 'C' || level === 'D') {
+      } else if (level === 'D') {
         return 8.5
       }
     }

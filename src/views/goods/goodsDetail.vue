@@ -545,6 +545,7 @@
           <span class="name">{{item.goods_name}}</span>
           <span class="price">价格：￥{{item.goods_price}}</span>
           <span class="position">位置：{{item.goods_order}}</span>
+          <span class="code">存货编号：{{item.goods_code}}</span>
         </div>
         <!-- 商品详细信息 -->
         <div class="item-goodDesc clearfix">
@@ -596,9 +597,9 @@
           </div>
           <div class="handle-content">
             <div class="btn" v-if="goodsDescList[index].goods_intro" @click="showEditDescDialog(goodsDescList[index])">编辑</div>
-            <div class="btn" v-if="!goodsDescList[index].goods_intro" @click="showAddDescDialog(item.id)">添加</div>
-            <div class="btn" @click="showDelGoodDesc(goodsDescList[index].detail_id)">删除商品详情</div>
-            <div class="btn" @click="showDelGood(item.id)">删除商品</div>
+            <div class="btn" v-if="!goodsDescList[index].goods_intro" @click="showAddDescDialog(item)">添加</div>
+            <div class="btn" @click="showDelGoodDesc(goodsDescList[index])">删除商品详情</div>
+            <div class="btn" @click="showDelGood(item)">删除商品</div>
           </div>
         </div>
       </div>
@@ -770,7 +771,9 @@ import api from '../../api/index'
 export default {
   created () {
     this.getAllGoods(this.currentPage)
-    this.getAllGoodsDesc(this.currentPage)
+    setTimeout(()=>{
+      this.getAllGoodsDesc(this.currentPage)
+    },500)
   },
   data () {
     return {
@@ -807,18 +810,9 @@ export default {
           goods_name: '安泰-636防霉密封胶',
           goods_price: '720',
           goods_order: '1',
+          goods_code: '0212401',
           id: '2'
         }
-        // {
-        //   name: '安泰-636防霉密封胶',
-        //   price: '730',
-        //   position: '2'
-        // },
-        // {
-        //   name: '安泰-636防霉密封胶',
-        //   price: '740',
-        //   position: '3'
-        // }
       ],
       // 显示添加商品详情对话框
       addDialog: false,
@@ -826,6 +820,7 @@ export default {
       addform: {
         id: '',
         goods_use: '',
+        goods_code: '',
         // nameDesc: '',
         // price: '',
         // introduce: '',
@@ -850,6 +845,7 @@ export default {
       // 编辑商品详情对话框表单数据
       editform: {
         id: '',
+        goods_code: '',
         goods_intro: '',
         goods_use: '',
         intro_image: '',
@@ -872,10 +868,14 @@ export default {
       showDelGoodsDesc: false,
       // 删除商品详情id
       delDescId: '',
+      delDescCode: '',
       // 显示删除商品对话框
       showDelGoods: false,
-      // 删除商品id
-      delId: '',
+      // 删除商品参数
+      delOptions: {
+        id: '',
+        goods_code: ''
+      },
       // 新增对话框右上角
       topDelHiddenAdd: true,
       // 编辑对话框右上角
@@ -909,14 +909,17 @@ export default {
       }
     },
     // 显示添加商品详情对话框
-    showAddDescDialog (id) {
+    showAddDescDialog (item) {
       this.addDialog = true
-      this.addform.id = id
+      this.addform.id = item.id
+      this.addform.goods_code = item.goods_code
     },
     // 显示编辑商品详情对话框
     showEditDescDialog (item) {
+      console.log('编辑item',item)
       this.editform = {
         id: '',
+        goods_code: '',
         goods_intro: '',
         goods_use: '',
         intro_image: '',
@@ -929,6 +932,7 @@ export default {
       this.editDialog = true
       this.topDelHiddenEdit = false
       this.editform.id = item.detail_id
+      this.editform.goods_code = item.goods_code
       this.editform.goods_intro = item.goods_intro
       this.editform.goods_use = item.goods_use
       this.editform.intro_image = item.intro_image
@@ -949,16 +953,18 @@ export default {
       }
     },
     // 显示删除商品详情对话框
-    showDelGoodDesc (id) {
-      console.log(id, 'delid')
+    showDelGoodDesc (item) {
+      console.log('删除商品详情 item', item)
       this.showDelGoodsDesc = true
-      this.delDescId = id
+      this.delDescId = item.id
+      this.delDescCode = item.goods_code
     },
     // 执行删除商品详情操作
     doDelGoodDesc () {
       this.showDelGoodsDesc = false
       api.delGoodDesc({
-        id: this.delDescId
+        id: this.delDescId,
+        goods_code: this.delDescCode
       }).then(res => {
         console.log(res, '删除商品详情')
         this.$message(res.message)
@@ -967,15 +973,18 @@ export default {
       })
     },
     // 显示删除商品对话框
-    showDelGood (id) {
+    showDelGood (item) {
+      console.log('删除商品 item', item)
       this.showDelGoods = true
-      this.delId = id
+      this.delOptions.id = item.id
+      this.delOptions.goods_code = item.goods_code
     },
     // 执行删除商品操作
     doDelGood () {
       this.showDelGoods = false
       api.delGood({
-        id: this.delId
+        id: this.delOptions.id,
+        goods_code: this.delOptions.goods_code
       }).then(res => {
         console.log(res, '删除商品')
         this.$message(res.message)
@@ -994,6 +1003,7 @@ export default {
         this.addform = {
           id: '',
           goods_use: '',
+          goods_code: '',
           color: '',
           unit: '',
           type: '',
@@ -1006,6 +1016,7 @@ export default {
         this.editform = {
           id: '',
           goods_intro: '',
+          goods_code: '',
           goods_use: '',
           intro_image: '',
           color: '',
@@ -1076,9 +1087,11 @@ export default {
       // console.log(colors, 'colors')
       api.addGoodDesc({
         goods_id: this.addform.id,
+        goods_code: this.addform.goods_code,
         imageArr: addImages,
         goods_intro: this.addform.goods_intro,
         goods_use: this.addform.goods_use,
+        goods_code: this.addform.goods_code,
         unit: this.addform.unit,
         type: this.addform.type,
         colors: colors
@@ -1132,6 +1145,7 @@ export default {
         imageArr: editImages,
         goods_intro: this.editform.goods_intro,
         goods_use: this.editform.goods_use,
+        goods_code: this.editform.goods_code,
         unit: this.editform.unit,
         colors: colors,
         type: this.editform.type

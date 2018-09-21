@@ -29,7 +29,9 @@ module.exports = {
   // https://vue-loader.vuejs.org/en/options.html
   // vueLoader: {},
   // 生产环境是否生成 sourceMap 文件
-  productionSourceMap: true,
+  productionSourceMap: false,
+  //生成的静态资源在它们的文件名中包含了 hash 以便更好的控制缓存。你可以通过将这个选项设为 false 来关闭文件名哈希
+  // filenameHashing:false,
   // css相关配置
   css: {
     // 是否使用css分离插件 ExtractTextPlugin
@@ -56,7 +58,8 @@ module.exports = {
     host: '0.0.0.0',
     port: 8080,
     https: false,
-    hotOnly: false,  
+    hotOnly: false,
+    open: true, //配置自动启动浏览器  
     proxy:{
       '/jtds/*': {
         // target: 'http://192.168.8.90',

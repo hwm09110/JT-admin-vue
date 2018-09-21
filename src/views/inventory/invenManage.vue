@@ -125,7 +125,7 @@
               width: 250px;
             }
             &:nth-child(9){
-              width: 160px;
+              width: 300px;
             }
             &:nth-child(10){
               width: 110px;

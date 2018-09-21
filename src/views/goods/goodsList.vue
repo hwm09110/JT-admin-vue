@@ -508,7 +508,6 @@ import api from '../../api/index'
 export default {
   created () {
     this.getAllGoods(this.currentPage)
-    console.log(this.$store.state.imgBaseUrl)
     // 匹配位置输入框
     // this.value = this.options[this.options.length - 1].label
   },
@@ -570,6 +569,7 @@ export default {
       // 修改表单数据
       editform: {
         id: '',
+        goods_code: '',
         goods_image: '',
         goods_name: '',
         goods_price: '',
@@ -577,7 +577,10 @@ export default {
       },
       // 显示删除商品对话框
       delDialog: false,
-      delIndex: '',
+      delform:{
+        id:'',
+        goods_code:''
+      },
       // 添加商品选择位置框值
       options: [{value: 1, label: 1}],
       editOption: [],
@@ -651,6 +654,7 @@ export default {
     editOldGood () {
       this.editDialog = false
       api.editGood({
+        goods_code:this.editform.goods_code,
         goods_name: this.editform.goods_name,
         goods_price: this.editform.goods_price,
         goods_order: this.editform.goods_order,
@@ -669,6 +673,7 @@ export default {
       this.editform.goods_image = row.goods_image
       this.editform.goods_price = row.goods_price
       this.editform.goods_order = row.goods_order
+      this.editform.goods_code = row.goods_code
       this.editform.id = row.id
     },
     // 取消对话框操作
@@ -691,14 +696,16 @@ export default {
     // 显示删除商品对话框
     showDelDialog (item) {
       this.delDialog = true
-      console.log(item.id, 'id')
-      this.delIndex = item.id
+      console.log('删除item',item)
+      this.delform.id = item.id
+      this.delform.goods_code = item.goods_code
     },
     // 执行删除商品操作
     delGoodHandle () {
       this.delDialog = false
       api.delGood({
-        id: this.delIndex
+        id: this.delform.id,
+        goods_code: this.delform.goods_code
       }).then(res => {
         console.log(res, '删除商品')
         this.$message(res.message)

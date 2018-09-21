@@ -175,7 +175,7 @@ export default {
         {name:'邀请码管理',id:2},
         {name:'订单管理',id:3},
         {name:'库存管理',id:4},
-        {name:'管理员设置',id:5},
+        // {name:'管理员设置',id:5},
         {name:'修改记录',id:6},
         {name:'用户',id:7}
       ],
