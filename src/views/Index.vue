@@ -288,6 +288,7 @@
 
 <script>
 import api from '../api/index'
+import Cookies from 'js-cookie'
 
 export default {
   created () {
@@ -310,7 +311,7 @@ export default {
   },
   data () {
     return {
-      userName: localStorage.getItem('user') ||'集泰最帅',
+      userName: localStorage.getItem('accountName'),
       // 是否激活子菜单
       showChild: [],
       // 菜单列表数据
@@ -436,9 +437,10 @@ export default {
               type: 'success',
               message: '退出登录成功'
             })
-            localStorage.removeItem('isLogin')
             localStorage.removeItem('accessRouteList')
-            this.clearCookie() //清除user password
+            Cookies.remove('isLogin')
+            Cookies.remove('user') //清除user password
+            Cookies.remove('password')
             this.$router.push({path: '/login'})
           }else{
             this.$message.error(res.message)
@@ -455,57 +457,10 @@ export default {
       this.$router.push({path: path})
       this.activeNav = index
     },
-    // 设置cookie
-    setCookie (cname, cvalue, exdays) {
-      var d = new Date()
-      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000))
-      var expires = 'expires=' + d.toUTCString()
-      // console.info(cname + '=' + cvalue + '; ' + expires)
-      document.cookie = cname + '=' + cvalue + '; ' + expires
-      // console.info(document.cookie)
-    },
-    // 清除cookie
-    clearCookie () {
-      this.setCookie('user', '', -1)
-      this.setCookie('password', '', -1)
-    },
     //设置[超级管理员出现]
     gotoSet () {
       this.$router.push({path: '/manage'})
     },
-    //获取账号权限菜单
-    // getAccountAuth () {
-    //   api.getUserAccountAuth({}).then(res=>{
-    //     console.log('账号权限列表',res);
-    //     if(res.code == 200){
-    //       const authList = res.extraData.info;
-    //       const isAdmin = res.extraData.is_admin; //是否是超级管理员 1:是 2：不是
-    //       if(authList.length>0){
-    //         authList.forEach((item,i)=>{
-    //           this.topNav.forEach((navItem,j)=>{
-    //             if(navItem.code == item){
-    //               this.accessTopNav.push(navItem)
-    //             }
-    //           })
-    //         })
-
-    //         authList.forEach((item,i)=>{
-    //           this.asideNav.forEach((navItem,j)=>{
-    //             if(navItem.code == item){
-    //               this.accessAsideNav.push(navItem)
-    //             }
-    //           })
-    //         })
-
-    //         this.isSupperAdmin = isAdmin == 1?true:false;
-    //         //保存权限信息到本地
-    //         localStorage.setItem('authList',authList);
-    //       }
-    //     }else{
-    //       this.$message.error(res.message)
-    //     }
-    //   })
-    // }
     getAccountAuth () {
       this.$store.dispatch('getAccessRouter').then(res=>{
         let accessRouteList = this.$store.state.accessRouteList

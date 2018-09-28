@@ -344,7 +344,7 @@
           </tr>
         </tbody>
       </table> -->
-      <div class="table">
+      <div class="table" v-loading="loading">
         <div class="thead">
           <div class="tr clearfix">
             <div class="th" v-for='(item, index) in tableHead' :key="index" :style="item.style">{{item.name}}</div>
@@ -514,6 +514,8 @@ export default {
   data () {
     return {
       baseUrl: 'https://oa.jointas.com',
+      // 是否显示loading动画
+      loading:false,
       // 面包屑数据
       breadcrumbList: [
         {name: '商品管理', path: '/goods'},
@@ -784,10 +786,12 @@ export default {
     },
     // 获取商品列表
     getAllGoods (page) {
+      this.loading = true
       api.getGoodList({
         page: page
       }).then(res => {
         console.log(res, '获取商品列表')
+        this.loading = false
         if (res.code === '200') {
           this.goodsList = res.extraData.info
           // 商品总个数
@@ -801,6 +805,9 @@ export default {
           this.addPickData()
           this.editPickData()
         }
+      })
+      .catch(error=>{
+        this.loading = false
       })
     }
   },

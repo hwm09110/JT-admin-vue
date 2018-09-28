@@ -479,7 +479,7 @@
     </div> -->
 
     <!-- 中间表单 -->
-    <div class="manage-box-content">
+    <div class="manage-box-content" v-loading="loading">
       <div v-if="orderList.length == 0" class="emptyTip">暂无符合搜索条件的订单</div>
       <div class="manage-item" v-for="(item, index) in orderList" :key='index' v-if="orderList.length != 0">
         <div class="manage-item-baseInfo">
@@ -696,8 +696,8 @@ export default {
   },
   data () {
     return {
+      loading:false,
       // 订单列表
-      // orderList: [],
       orderList: [
         {
           order_id: '1',
@@ -937,6 +937,7 @@ export default {
     },
     // 获取订单列表
     getAllOrder (goodsName, beginTime, endTime, receiveName, wlStatus, inviteCode, saleName, page = 1) {
+      this.loading = true
       api.getOrderList({
         goods_name: goodsName,
         begin_time: beginTime / 1000,
@@ -947,6 +948,7 @@ export default {
         sale_name: saleName,
         page: page
       }).then(res => {
+        this.loading = false
         console.log(res, '获取订单列表')
         if (res.code === '200') {
           this.orderList = res.extraData.info

@@ -6,12 +6,6 @@ import baseURL from '../../config/setBaseUrl'
 Vue.use(Vuex)
 const state = {
   nav: '物流管理',
-
-  //线上
-  // imgBaseUrl: 'https://oa.jointas.com',
-  // apiDomain: 'https://oa.jointas.com',
-
-  //本机
   apiDomain: baseURL.api_domain,
   imgBaseUrl:baseURL.img_base_url,
   

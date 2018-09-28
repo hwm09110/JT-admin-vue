@@ -7,6 +7,7 @@ import router from './router/index'
 // 引入覆盖element-ui样式
 import '@/styles/resetElement-ui.scss'
 import store from './store/index'
+import Cookies from 'js-cookie'
 
 // 引入导入导出Excel的js文件
 // import Blob from './excel/Blob.js'
@@ -30,9 +31,8 @@ router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title
   }
-  let isLogin = localStorage.getItem('isLogin')
+  let isLogin = Cookies.get('isLogin')
   
-  // return;
   // 如果登录了，就放行
   if (isLogin) {
     if(path_code){

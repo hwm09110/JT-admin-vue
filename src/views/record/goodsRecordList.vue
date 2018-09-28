@@ -112,7 +112,7 @@
 
   <div class="manage-box">
     <div class="manage-box-title">首页商品修改记录列表</div>
-    <div class="table-wrap">
+    <div class="table-wrap" v-loading="loading">
       <table class="table-box">
         <colgroup>
           <col width="20%" />
@@ -159,6 +159,7 @@ export default {
   },
   data () {
     return {
+      loading: false,
       // 面包屑数据
       breadcrumbList: [
         {name: '设置', path: '/manage'},
@@ -190,10 +191,12 @@ export default {
   methods: {
       //拉取首页商品修改记录列表
       getGoodRecordList (page) {
+        this.loading = true
         api.getRecordList({
           page: page,
           type: 2
         }).then(res=>{
+          this.loading = false
           console.log(res);
           if(res.code == 200){
             this.tableData = res.extraData.info

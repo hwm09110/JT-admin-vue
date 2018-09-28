@@ -286,7 +286,7 @@
         </el-form>
       </div>
       <!-- 底部表格 -->
-      <div class="code-box-table">
+      <div class="code-box-table" v-loading="loading">
         <el-table
           :data="codeList"
           stripe
@@ -848,7 +848,7 @@ export default {
     },
     // 获取、查询邀请码接口
     getCode (level, property, search, page = 1) {
-      // this.loading = true //开启loading 动画
+      this.loading = true //开启loading 动画
       api.getYqm({
         level: level,
         property: property,

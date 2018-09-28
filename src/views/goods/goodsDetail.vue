@@ -537,7 +537,7 @@
   <div class="goodsDetail-box">
     <!-- 每项商品详情 -->
     <div class="goodsDetail-box-title">商品管理</div>
-    <div class="goodsDetail-box-item-list">
+    <div class="goodsDetail-box-item-list" v-loading="loading">
       <div class="goodsDetail-box-item clearfix" v-for="(item, index) in goodsHomeInfo" :key="index">
         <!-- 首页信息 -->
         <div class="item-homeInfo">
@@ -778,6 +778,7 @@ export default {
   data () {
     return {
       baseUrl: 'https://oa.jointas.com',
+      loading:false,
       // 面包屑
       breadcrumbList: [
         // {name: '首页', path: '/home'},
@@ -1239,9 +1240,11 @@ export default {
     },
     // 获取商品详情
     getAllGoodsDesc (page) {
+      this.loading = true
       api.getGoodDescList({
         page: page
       }).then(res => {
+        this.loading = false
         console.log(res, '获取all商品详情')
         if (res.code === '200') {
           this.goodsDescList = res.extraData.info

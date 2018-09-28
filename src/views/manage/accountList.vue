@@ -128,7 +128,7 @@
     <div class="operate-box">
       <span class="add-account" @click="addAccount">添加新账号</span>
     </div>
-    <div class="table-wrap">
+    <div class="table-wrap" v-loading="loading">
       <table class="table-box">
         <tbody>
           <tr>
@@ -182,6 +182,7 @@ export default {
   },
   data () {
     return {
+      loading: false,
       // 面包屑数据
       breadcrumbList: [
         {name: '设置', path: '/manage'},
@@ -214,9 +215,11 @@ export default {
       },
       //拉取账号列表
       getAccountList (page=1) {
+        this.loading = true
         api.getUserAccountList({
           page: page
         }).then(res=>{
+          this.loading = false
           console.log(res);
           if(res.code == 200){
             this.tableData = res.extraData.info

@@ -3,17 +3,10 @@ import Qs from 'qs'
 import router from "../router"
 import { Message } from "element-ui"
 import baseURL from '../../config/setBaseUrl'
+import Cookies from 'js-cookie'
 
 // 设置基准路径
-//本机
 const URL = baseURL.axios_base_url
-
-//内网
-// const URL = 'http://192.168.8.90'
-
-//外网
-// const URL = 'https://oa.jointas.com'
-
 axios.defaults.baseURL = URL
 axios.defaults.withCredentials = true
 // 设置请求超时
@@ -42,7 +35,7 @@ axios.interceptors.response.use(function (response) {
       duration:3000
     })
     router.push('/login')
-    localStorage.removeItem('isLogin')
+    Cookies.remove('isLogin')
     localStorage.removeItem('accessRouteList')
     return Promise.reject(response.data)
   }

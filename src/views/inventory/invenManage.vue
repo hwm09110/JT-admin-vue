@@ -334,7 +334,7 @@
     </div>
 
     <!-- 表格 -->
-    <div class="invenManage-box-table">
+    <div class="invenManage-box-table" v-loading="loading">
       <table class="myTable" border="1" v-if="table">
         <thead>
           <tr>
@@ -363,101 +363,6 @@
           </tr>
         </tbody>
       </table>
-      <!-- <el-table
-        :data="table.tableBody"
-        stripe
-        style="width: 100%">
-        <el-table-column
-          prop="company_code"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="company_name"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="organiz_code"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="organiz_name"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="storage_code"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="storage_name"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="goods_code"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="goods_name"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="guige"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="type"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="unit"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="sec_unit"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="num"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="weight"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="sec_num"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="num"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="freeze_num"
-          label="等级"
-          >
-        </el-table-column>
-        <el-table-column
-          prop="freeze_weight"
-          label="等级"
-          >
-        </el-table-column>
-      </el-table> -->
       <div class="tableTip" v-if="!table.tableHead">暂无数据，请导入表格</div>
     </div>
 
@@ -487,6 +392,7 @@ export default {
   },
   data () {
     return {
+      loading:false,
       fileList: [],
       // 面包屑数据
       breadcrumbList: [
@@ -635,6 +541,7 @@ export default {
     },
     // 获取库存列表-筛选库存
     storageList (storageCode, storageName, guige, secUnit, organizCode, organizName, companyName, search, page = 1) {
+      this.loading = true
       api.getStorageList({
         storage_code: storageCode,
         storage_name: storageName,
@@ -646,6 +553,7 @@ export default {
         search: search,
         page: page
       }).then(res => {
+        this.loading = false
         console.log(res, '库存列表')
         if (res.code === '200') {
           this.table.tableBody = res.extraData.info
@@ -660,17 +568,4 @@ export default {
     }
   }
 }
-// let reader = new FileReader()
-// 二进制读取
-// reader.readAsBinaryString(file)
-// 纯文本读取
-// reader.readAsText(file)
-// reader.onload = function (res) {
-//   console.log(res.target.result)
-//   api.importExcel({
-//     excelfile: res.target.result
-//   }).then(res => {
-//     console.log(res, '上传excel')
-//   })
-// }
 </script>

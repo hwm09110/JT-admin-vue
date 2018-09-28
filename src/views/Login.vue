@@ -36,15 +36,6 @@
   margin-bottom: 30px;
   position: relative;
 }
-.login-box-view-handle-user .user-tip1,
-.login-box-view-handle-psd .user-tip2{
-  position: absolute;
-  bottom : -22px;
-  left: 40px;
-  color: red;
-  font-size: 14px;
-  // display: none;
-}
 /* 输入框 */
 .login-box-view-handle-user input,
 .login-box-view-handle-psd input{
@@ -136,12 +127,10 @@
           <form action="">
             <div class="login-box-view-handle-user">
               <img src="../images/user.png" alt="">
-              <input type="text" placeholder="请输入账号" name="user" v-model="user" @blur="checkUser" @keyup.enter="logining">
-              <div class="user-tip1" v-if="tipShow[0]">请填写账号</div>
+              <input type="text" placeholder="请输入账号" name="user" v-model="user"  @keyup.enter="logining">
             </div>
             <div class="login-box-view-handle-psd">
-              <input type="password" placeholder="请输入密码" name="password" v-model="password" @blur="checkPsd" @keyup.enter="logining">
-              <div class="user-tip2" v-if="tipShow[1]">请填写密码</div>
+              <input type="password" placeholder="请输入密码" name="password" v-model="password" @keyup.enter="logining">
             </div>
             <div class="login-box-view-handle-forget clearfix">
               <div class="login-box-view-handle-forget-seven">
@@ -169,161 +158,98 @@
 
 <script>
 import api from '../api/index'
+import Cookies from 'js-cookie'
+import secret from '../utils/secret'
+
 export default {
   created () {
     // 取出cookie，调用接口
-    if (localStorage.getItem('isLogin')) {
-      this.user = this.getCookie('user')
-      this.password = this.getCookie('password')
-      if(this.user && this.password){
-        this.logining()
-      }
+    let isLogin = Cookies.get('isLogin')
+    if (isLogin) {
+      this.$router.push('/home')
+      return
     }
+    this.autoLogin()
   },
   mounted () {
   },
   data () {
     return {
-      tipShow: [false, false],
-      user: 'yanpan',
-      password: '123456',
+      user: '',
+      password: '',
       sevenDay: ''
     }
   },
   methods: {
-    // 验证输入
-    checkUser () {
-      this.$set(this.tipShow, 0, !this.user)
-      localStorage.setItem('user', this.user)
-    },
-    checkPsd () {
-      this.$set(this.tipShow, 1, !this.password)
+    showMsg(content){
+      this.$message({
+        message: content,
+        duration:2000,
+        type: 'warning'
+      });
     },
     // 进行登录
     logining () {
-      this.checkUser()
-      this.checkPsd()
-
-      if (this.user && this.password) {
-        // 设置本地存储来存储登录状态
-        // localStorage.setItem('isLogin', true)
-        // 发送登录请求
-        // 设置cookie--7天过期
-        // this.setCookie('test1', this.user, 7)
-        // this.setCookie('test2', this.password, 7)
-        api.checkLogin({
-          'account': this.user,
-          'pswd': this.password
-        }).then(res => {
-          console.log(res, '登录接口')
-          if (res.data.code === '200') {
-            this.rememberAccount()
-            localStorage.setItem('isLogin', true)
-            //登录成功，拿权限列表
-            this.$store.dispatch('getAccessRouter').then(res=>{
-              
-              this.jumpToFirstAccess()
-            })
-            
-          }else{
-             this.$message.error(res.data.message)
-          }
-        })
+      if(!this.user || !this.user.trim()){
+        this.showMsg('请输入账号！')
+        return
       }
+      if(!this.password || !this.password.trim()){
+        this.showMsg('请输入密码！')
+        return
+      }
+      api.checkLogin({
+        'account': this.user,
+        'pswd': this.password
+      }).then(res => {
+        console.log(res, '登录接口')
+        if (res.data.code === '200') {
+          this.rememberAccount()
+          Cookies.set('isLogin',true)
+          localStorage.setItem('accountName',this.user)
+          //登录成功，拿权限列表
+          this.$store.dispatch('getAccessRouter').then(res=>{
+            this.jumpToFirstAccess()
+          })
+        }else{
+            this.$message.error(res.data.message)
+        }
+      })
     },
     // 记住账号密码 七天自动登录
     rememberAccount () {
       if (this.sevenDay) {
-        this.setCookie('user', this.user, 7)
-        this.setCookie('password', this.password, 7)
+        let encrypt_user = secret.Encrypt(this.user)
+        let encrypt_pwd = secret.Encrypt(this.password)
+
+        Cookies.set('user', encrypt_user, { expires: 7 })
+        Cookies.set('password', encrypt_pwd, { expires: 7 })
       }
     },
     // 忘记密码
     forget () {
       this.$router.push({path: '/forget'})
     },
-    // 设置cookie
-    setCookie (cname, cvalue, exdays) {
-      var d = new Date()
-      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000))
-      var expires = 'expires=' + d.toUTCString()
-      // console.info(cname + '=' + cvalue + '; ' + expires)
-      document.cookie = cname + '=' + cvalue + '; ' + expires
-      // console.info(document.cookie)
-    },
-    // 获取cookie
-    getCookie (cname) {
-      var name = cname + '='
-      var ca = document.cookie.split(';')
-      for (var i = 0; i < ca.length; i++) {
-        var c = ca[i]
-        while (c.charAt(0) === ' ') c = c.substring(1)
-        if (c.indexOf(name) !== -1) return c.substring(name.length, c.length)
-      }
-      return ''
-    },
-    // 清除cookie
-    clearCookie () {
-      this.setCookie('username', '', -1)
-    },
-    checkCookie () {
-      var user = this.getCookie('username')
-      if (user !== '') {
-        alert('Welcome again ' + user)
-      } else {
-        user = prompt('Please enter your name:', '')
-        if (user !== '' && user !== null) {
-          this.setCookie('username', user, 365)
-        }
-      }
-    },
-    // 获取当天日期
-    getToday () {
-      let date = new Date()
-      let Y = date.getFullYear()
-      let M = date.getMonth() + 1
-      let D = date.getDate()
-      M = M > 9 ? M : '0' + M
-      D = D > 9 ? D : '0' + D
-      let X = date.getDay()
-      switch (X) {
-        case 0:
-          X = '  星期日'
-          break
-        case 1:
-          X = '  星期一'
-          break
-        case 2:
-          X = '  星期二'
-          break
-        case 3:
-          X = '  星期三'
-          break
-        case 4:
-          X = '  星期四'
-          break
-        case 5:
-          X = '  星期五'
-          break
-        case 6:
-          X = '  星期六'
-          break
-      }
-      this.today = Y + '年' + M + '月' + D + '日' + X
-      localStorage.setItem('today', this.today)
-    },
     //跳转到有权限访问的第一个页面
     jumpToFirstAccess () {
-      console.log(this.$store.state.accessRouteList);
+      // console.log(this.$store.state.accessRouteList);
       let constantRoutePath = this.$store.state.constantRoutePath
       let accessRouteList = this.$store.state.accessRouteList
       let path_code = Math.min(...accessRouteList)
       let jump_path = constantRoutePath[path_code] || {path: '/home'}
       this.$router.push(jump_path)
+    },
+    //自动登录
+    autoLogin () {
+      console.log('自动登录...')
+      let encrypt_user = Cookies.get('user')
+      let encrypt_password = Cookies.get('password')
+      if(encrypt_user && encrypt_password){
+        this.user = secret.Decrypt(encrypt_user)
+        this.password = secret.Decrypt(encrypt_password)
+        this.logining()
+      }
     }
-  },
-  destroyed () {
-    localStorage.setItem('user', this.user)
   }
 }
 </script>

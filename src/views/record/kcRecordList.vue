@@ -114,7 +114,7 @@
   <div class="manage-box">
     <div class="manage-box-title">库存修改记录列表</div>
     <div class="table-wrap">
-      <table class="table-box">
+      <table class="table-box" v-loading="loading">
         <tbody>
           <tr>
             <th>修改时间</th>
@@ -160,6 +160,7 @@ export default {
   },
   data () {
     return {
+      loading:false,
       // 面包屑数据
       breadcrumbList: [
         {name: '设置', path: '/manage'},
@@ -191,10 +192,12 @@ export default {
   methods: {
       //拉取库存操作记录列表
       getKcRecordList (page) {
+        this.loading = true
         api.getRecordList({
           page: page,
           type:1
         }).then(res=>{
+          this.loading = false
           console.log(res);
           if(res.code == 200){
             this.tableData = res.extraData.info
