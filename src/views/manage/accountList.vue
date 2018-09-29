@@ -27,7 +27,6 @@
   box-sizing: border-box;
 }
 
-.operate-box{}
 .operate-box .add-account{
   display: inline-block;
   cursor: pointer;

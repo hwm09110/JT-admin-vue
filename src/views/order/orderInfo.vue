@@ -184,9 +184,9 @@
             float: left;
             margin-top: 15px;
             // border-left: 1px solid #dcdcdc;
-            .goodInfo{
-              // border-bottom: 1px solid #dcdcdc;
-            }
+            // .goodInfo{
+            //   border-bottom: 1px solid #dcdcdc;
+            // }
             .size{
               // padding-top: 15px;
               // width: 66%;

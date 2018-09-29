@@ -127,10 +127,10 @@
           <form action="">
             <div class="login-box-view-handle-user">
               <img src="../images/user.png" alt="">
-              <input type="text" placeholder="请输入账号" name="user" v-model="user"  @keyup.enter="logining">
+              <input type="text" placeholder="请输入账号" name="user" v-model.trim="user"  @keyup.enter="logining">
             </div>
             <div class="login-box-view-handle-psd">
-              <input type="password" placeholder="请输入密码" name="password" v-model="password" @keyup.enter="logining">
+              <input type="password" placeholder="请输入密码" name="password" v-model.trim="password" @keyup.enter="logining">
             </div>
             <div class="login-box-view-handle-forget clearfix">
               <div class="login-box-view-handle-forget-seven">
@@ -190,11 +190,11 @@ export default {
     },
     // 进行登录
     logining () {
-      if(!this.user || !this.user.trim()){
+      if(!this.user){
         this.showMsg('请输入账号！')
         return
       }
-      if(!this.password || !this.password.trim()){
+      if(!this.password){
         this.showMsg('请输入密码！')
         return
       }
