@@ -4,6 +4,7 @@
   padding: 20px;
   padding-top: 55px;
   background-color: #f1f4f7;
+  min-height: 100%;
   height: 100%;
   box-sizing: border-box;
   position: relative;
@@ -131,14 +132,18 @@
           <tr>
             <th>手机号</th>
             <th>昵称</th>
+            <th>性别</th>
+            <th>地区</th>
             <th>用户注册时间</th>
           </tr>
           <tr v-for="(item,index) in tableData" :key="index">
             <td>{{item.phone}}</td>
             <td>{{item.nickname}}</td>
+            <td>{{item.gender}}</td>
+            <td>{{item.country}}-{{item.province}}-{{item.city}}</td>
             <td>{{item.create_date}}</td>
           </tr>
-          <tableNoData msg="没有相关数据" colspanNum="3" v-if="tableData.length==0"></tableNoData>
+          <tableNoData msg="没有相关数据" colspanNum="5" v-if="tableData.length==0"></tableNoData>
         </tbody>
       </table>
     </div>
@@ -177,25 +182,16 @@ export default {
       },
       tableData: [
         {
-          "id": "1",
-          "phone": "13265015954",
-          "nickname": "KKKKKKK丶",
-          "create_time": "1532658544",
-          "create_date": "2018-07-27 10:29:04"
-        },
-        {
-          "id": "1",
-          "phone": "13265015954",
-          "nickname": "KKKKKKK丶",
-          "create_time": "1532658544",
-          "create_date": "2018-07-27 10:29:04"
-        },
-        {
-          "id": "1",
-          "phone": "13265015954",
-          "nickname": "KKKKKKK丶",
-          "create_time": "1532658544",
-          "create_date": "2018-07-27 10:29:04"
+          "city":"Brisbane",
+          "country":"Australia",
+          "create_date":"2018-07-27 10:29:04",
+          "create_time":"1532658544",
+          "gender":"男",
+          "id":"1",
+          "nickname":"KKKKKKK丶",
+          "phone":"13265015954",
+          "province":"Queensland"
+          
         }
       ],
       currentPage: 1,
